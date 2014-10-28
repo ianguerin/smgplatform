@@ -27,7 +27,9 @@ angular.module('myApp')
   var offstring = args.off;
   if(offstring.search('AUTO_MATCH')!== -1){flags.automatch=0;}
   if(offstring.search('EMAIL_JS_ERRORS') !== -1){flags.emailJsErrors=0;}
-  console.log(flags);
+ // console.log(flags);
+  
+  return flags;
   }
   
   this.setflags = setflags;

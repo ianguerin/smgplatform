@@ -17,6 +17,12 @@ angular.module('myApp', [])
       $scope.loggedIn = false;
     }
 
+    $scope.$watch('gameId', function (newValue, oldValue) {
+      if($scope.gameId != null){
+        $scope.getMyMatches();
+      }
+    }, true);
+
     // ask server for a list of all the games in the server's library
     $scope.getGames = function(){
       var message = [{getGames: {}}];
@@ -34,16 +40,6 @@ angular.module('myApp', [])
         return;
       }
       alert(window.localStorage.getItem("myPlayerId") + " " + window.localStorage.getItem("accessSignature"));
-    };
-
-    // select a game, track its id
-    $scope.selectGame = function(id){
-      if(!$scope.loggedIn){
-        alert("log in first!");
-        return;
-      }
-      $scope.gameId = id;
-      $scope.getMyMatches();
     };
 
     // if player has selected a game, find a list of their ongoing matches in that game

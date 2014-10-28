@@ -6,18 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="http://yoav-zibin.github.io/emulator/main.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
-  <script src="serverApiTest.js"></script>
+  <script src="smgplatform.js"></script>
   <script src="http://yoav-zibin.github.io/emulator/serverApiService.js"></script>
 </head>
-<body style="height:100%; width:100%; overflow: hidden;" ng-cloak ng-controller="Ctrl">
-Server API spec:<br>
-<textarea ng-model="closureTypes" rows=3 cols=80 readonly>Making a ServerApi call to load Server API spec here...</textarea>
+<body style="height:100%; width:100%;" ng-cloak ng-controller="Ctrl">
 <br>
-<span ng-show="loggedIn">{{displayName}}</span>
 <img src="images/avatar0.png" ng-show="loggedIn"/>
 <br>
-  <button ng-click="registerPlayerAsGuest()">Register Player As Guest</button>
-  <button ng-click="checkIdAndSig()">Check My Credentials</button>
+<span ng-show="loggedIn">{{displayName}}</span>
+<br>
+<button ng-click="registerPlayerAsGuest()">Register Player As Guest</button>
+<button ng-click="checkIdAndSig()">Check My Credentials</button>
+<button ng-click="reserveAutoMatch()">Reserve Auto Match!</button>
+<br>
+selected game - {{gameId ? gameId : 'no game selected'}}
+<br>
 <br>
 Example messages:<br>
 <textarea rows=7 cols=80>
@@ -33,13 +36,15 @@ Example messages:<br>
 [{dismissMatch: {matchId:"...", myPlayerId:"...",accessSignature:"..."}}]
 </textarea>
 <br>
-Enter message in JSON format:<br>
-<textarea ng-model="json" rows=2 cols=80></textarea>
-<br>
-  <button ng-click="sendMessage()">Send Server API message</button>
-<br>
 Server response:<br>
 <textarea ng-model="response" rows=5 cols=80 readonly></textarea>
 <br>
+<select ng-model="gameId" ng-options="game.gameId as game.languageToGameName.en for game in games">
+  <option value="">Select A Game</option>
+</select>
+<ul ng-show="gameId != null">
+  {{myMatches == null ? 'you don\'t have any matches!' : ''}}
+  <li ng-repeat="key in myMatches track by $index" ng-click="selectGame(key.gameId)">{{key.languageToGameName.en}}</li>
+</ul>
 </body>
 </html>

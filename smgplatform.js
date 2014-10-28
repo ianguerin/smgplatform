@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('myApp', [])
-  .controller('Ctrl', function ($scope, serverApiService) {
-    serverApiService.sendMessage(
-        [{getServerApi:{serverApiResult:"TYPE_DESCRIPTIONS_RESULT"}}],
-        function (response) {
-          $scope.closureTypes = angular.toJson(response[0].serverApiTypeDescriptions, true);
-        });
+  .controller('Ctrl', 
+    function ($sce, $scope, $rootScope, $log, $window, serverApiService, platformMessageService, stateService) {
+
+    // initializing some global variables
+    $scope.showGame = false;
 
     if(window.localStorage.getItem("myPlayerId") && window.localStorage.getItem("accessSignature")){
       $scope.loggedIn = true;
@@ -31,7 +30,7 @@ angular.module('myApp', [])
         $scope.games = eval($scope.response)[0].games;
       });
     };
-    $scope.getGames();
+    //$scope.getGames();
 
     // this is just to verify local storage is working
     $scope.checkIdAndSig = function(){
@@ -55,7 +54,7 @@ angular.module('myApp', [])
       });
     };
 
-    // if player has selected a game, create new match
+    // if player has selected a game, create new match 
     $scope.reserveAutoMatch = function(){
       if(!$scope.loggedIn){
         alert("log in first!");
@@ -69,7 +68,11 @@ angular.module('myApp', [])
       var message = [{reserveAutoMatch: {tokens:0, numberOfPlayers:2, gameId: $scope.gameId, myPlayerId:$scope.myPlayerId, accessSignature:$scope.accessSignature}}];
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
-        console.log($scope.response);
+        // if there is a match that is joinable
+        if(eval($scope.response)[0].matches.length > 0 || true){
+          $scope.gameUrl = "http://yoav-zibin.github.io/TicTacToe/game.html";
+          $scope.showGame = true;
+        }
       });
     };
 
@@ -91,6 +94,65 @@ angular.module('myApp', [])
         $scope.accessSignature = window.localStorage.getItem("accessSignature");
       });
     };
+
+    /*
+    * copying and pasting from platform.js
+    */
+    var platformUrl = $window.location.search;
+    var gameUrl = platformUrl.length > 1 ? platformUrl.substring(1) : null;
+    if (gameUrl === null) {
+      $log.error("You must pass the game url like this: ...platform.html?<GAME_URL> , e.g., http://yoav-zibin.github.io/emulator/platform.html?http://yoav-zibin.github.io/TicTacToe/game.html");
+      $window.alert("You must pass the game url like this: ...platform.html?<GAME_URL> , e.g., ...platform.html?http://yoav-zibin.github.io/TicTacToe/game.html");
+      return;
+    }
+    $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
+    var gotGameReady = false;
+
+    $scope.startNewMatch = function () {
+      stateService.startNewMatch();
+    };
+    $scope.getStatus = function () {
+      if (!gotGameReady) {
+        return "Waiting for 'gameReady' message from the game...";
+      }
+      var matchState = stateService.getMatchState();
+      if (matchState.endMatchScores) {
+        return "Match ended with scores: " + matchState.endMatchScores;
+      }
+      return "Match is ongoing! Turn of player index " + matchState.turnIndex;
+    };
+    $scope.playMode = "passAndPlay";
+    stateService.setPlayMode($scope.playMode);
+    $scope.$watch('playMode', function() {
+      stateService.setPlayMode($scope.playMode);
+    });
+
+    platformMessageService.addMessageListener(function (message) {
+      if (message.gameReady !== undefined) {
+        gotGameReady = true;
+        var game = message.gameReady;
+        game.isMoveOk = function (params) {
+          platformMessageService.sendMessage({isMoveOk: params});
+          return true;
+        };
+        game.updateUI = function (params) {
+          platformMessageService.sendMessage({updateUI: params});
+        };
+        stateService.setGame(game);
+      } else if (message.isMoveOkResult !== undefined) {
+        if (message.isMoveOkResult !== true) {
+          $window.alert("isMoveOk returned " + message.isMoveOkResult);
+        }
+      } else if (message.makeMove !== undefined) {
+        stateService.makeMove(message.makeMove);
+      }
+    });
+
+    /*
+    * end paste from platform.js
+    */
+
+
   })
   .factory('$exceptionHandler', function ($window) {
     return function (exception, cause) {

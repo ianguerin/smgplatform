@@ -32,6 +32,7 @@ angular.module('myApp')
           $log.info("serverApiService got: ", msg);
           var position = msg.id;
           var reply = msg.reply;
+          $log.info(position);
           var callback = waitingForReply[position].callback;
           delete waitingForReply[position];
           callback(reply);

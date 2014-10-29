@@ -6,37 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="main.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
-  <script src="http://yoav-zibin.github.io/emulator/intercom.js"></script>
   <script src="smgplatform.js"></script>
   <script src="http://yoav-zibin.github.io/emulator/serverApiService.js"></script>
   <script src="http://yoav-zibin.github.io/emulator/platformMessageService.js"></script>
-  <script src="http://yoav-zibin.github.io/emulator/stateService.js"></script>
 </head>
 <body ng-cloak ng-controller="Ctrl">
-  <br>
-  <button ng-click="startNewMatch()">New match</button>
-  <img src="images/avatar0.png" ng-show="loggedIn"/>
-  <br>
-  <span ng-show="loggedIn">{{displayName}}</span>
+  <img ng-src="{{playerInfo.avatarImageUrl}}" ng-show="loggedIn"/>
+  <span ng-show="loggedIn">{{playerInfo.displayName}}</span>
   <br>
   <button ng-click="registerPlayerAsGuest()">Register Player As Guest</button>
   <button ng-click="checkIdAndSig()">Check My Credentials</button>
-  <button ng-click="reserveAutoMatch()">Reserve Auto Match!</button>
-  <br>
-  selected game - {{gameId ? gameId : 'no game selected'}}
+  <button ng-click="reserveAutoMatch()">Reserve Auto Match (or make new)!</button>
+  selected game - {{gameId ? gameId : 'no game selected'}} * matchId = {{matchId}}
   <br>
   Server response:<br>
-  <textarea ng-model="response" rows=5 cols=80 readonly></textarea>
-  <br>
+  <textarea ng-model="response" rows=5 cols=100 readonly></textarea>
   <select ng-model="gameId" ng-options="game.gameId as game.languageToGameName.en for game in games">
     <option value="">Select A Game</option>
   </select>
+  <br>
+  <iframe frameborder="1" id="game_iframe" ng-src="{{gameUrl}}" scrolling="no" seamless="seamless" ng-show="showGame"></iframe>
   <ul ng-show="gameId != null">
-    {{myMatches == null ? 'you don\'t have any matches!' : ''}}
-    <li ng-repeat="key in myMatches track by $index" ng-click="">insert match information</li>
+    {{myMatches == null || myMatches.length == 0 ? 'you don\'t have any matches!' : ''}}
+    <li ng-repeat="match in myMatches track by $index" ng-click="loadGame(match.matchId)">created @ {{match.createdTimestampMillis}}</li>
   </ul>
   <br>
-  <iframe frameborder="1" id="game_iframe" ng-src="{{gameUrl}}"
-        scrolling="no" seamless="seamless" ></iframe>
 </body>
 </html>

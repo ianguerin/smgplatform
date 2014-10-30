@@ -287,7 +287,7 @@ angular.module('myApp', [])
             if(i == 0){
               stateBefore = {};
             }else{
-              stateBefore = $scope.history.stateAfterMoves[0];
+              stateBefore = $scope.history.stateAfterMoves[i-1];
             }
             var stateAfter = $scope.history.stateAfterMoves[i];
             
@@ -402,7 +402,7 @@ angular.module('myApp', [])
         alert("log in first!");
         return;
       }
-      alert(window.localStorage.getItem("myPlayerId") + " " + window.localStorage.getItem("accessSignature"));
+      alert($scope.playerInfo.myPlayerId + " " + $scope.playerInfo.accessSignature);
     };
 
   })

@@ -2,13 +2,14 @@
 <html lang="en" ng-app="myApp">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>GroupProj - v004</title>
+  <title>GroupProj - v005</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="main.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
   <script src="smgplatform.js"></script>
   <script src="http://yoav-zibin.github.io/emulator/serverApiService.js"></script>
   <script src="http://yoav-zibin.github.io/emulator/platformMessageService.js"></script>
+  <script src="featureService.js"></script>
 </head>
 <body ng-cloak ng-controller="Ctrl">
   <img ng-src="{{playerInfo.avatarImageUrl}}" ng-show="loggedIn"/>
@@ -30,7 +31,7 @@
     <option value="">Select A Match!</option>
   </select>
   <br>
-  {{endScore}}
+  {{endScore}} {{yourPlayerIndex}}
   <br>
   <iframe frameborder="1" id="game_iframe" ng-src="{{gameUrl}}" scrolling="no" seamless="seamless" ng-show="showGame"></iframe>
   

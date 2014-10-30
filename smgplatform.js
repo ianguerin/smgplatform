@@ -2,7 +2,12 @@
 
 angular.module('myApp', [])
   .controller('Ctrl', 
-    function ($sce, $scope, $rootScope, $log, $window, serverApiService, platformMessageService) {
+    function ($sce, $scope, $log, $window, $timeout, serverApiService, platformMessageService, featureService) {
+
+    // lets get some flags & args
+    featureService.init();
+    // console.log(featureService.flags);  
+    // console.log(featureService.args);  
 
     // initializing some global variables
     $scope.showGame = false;
@@ -31,6 +36,7 @@ angular.module('myApp', [])
         alert("log in first!");
         return;
       }
+
         var message = [ // GET_GAMES
           {
             getGames: {
@@ -41,22 +47,34 @@ angular.module('myApp', [])
         serverApiService.sendMessage(message, function (response) {
           $scope.response = angular.toJson(response, true);
           gameUrl = response[0].games[0].gameUrl;
+          $scope.gameInfo = response[0].games[0];
+          $scope.history = null;
+          $scope.showGame = false;
+          $scope.matchId = null;
+          $scope.yourPlayerIndex = null;
           $scope.getMyMatches();
         });
       }
     }, true);
 
     $scope.$watch("matchId", function (newValue, oldValue) {
+      if(oldValue != null && newValue != null){
+        $scope.getMyMatches();
+      }
       if(newValue == null || $scope.noMatches){
         if($scope.noMatches){
           // safe to set it back to false
           $scope.noMatches = false;
+          // still need to getMyMatches()
+          $scope.getMyMatches();
         }
         return;
       }else{
         if(!$scope.loggedIn){
           return;
-        } 
+        }
+
+        $scope.showGame = false;
         var matchId = newValue;
         var matchIndex = $scope.getMatchIndex(matchId);
         if(matchIndex == -1){
@@ -65,13 +83,19 @@ angular.module('myApp', [])
         $scope.matchId = matchId;
         $scope.history = $scope.myMatches[matchIndex].history;
         var yourPlayerIndex = $scope.getYourPlayerIndexForMatchIndex(matchIndex);
+
         if(yourPlayerIndex == -1){
           return;
         }
         $scope.yourPlayerIndex = yourPlayerIndex;
-        $scope.showGame = true;
+        
         // this is the operation that finally loads the game into the iframe
         $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
+        // this is to refresh the iframe
+        document.getElementById("game_iframe").src = $scope.gameUrl;
+        $timeout(function(){
+          $scope.showGame = true;
+        },500);
       }
     }, true);
 
@@ -91,10 +115,13 @@ angular.module('myApp', [])
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
         $scope.loggedIn = true;
-        
+
         window.localStorage.setItem("playerInfo", angular.toJson(response[0].playerInfo, true));
         $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
-
+        if($scope.playerInfo){
+          // refreshes the page
+          window.location.reload();
+        }
         // MUST CALL getGames AGAIN!
         $scope.getGames();
       });
@@ -136,6 +163,11 @@ angular.module('myApp', [])
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
         $scope.myMatches = response[0].matches;
+        if(!angular.equals($scope.myMatches, response[0].matches)){
+          if($scope.gameUrl){
+            document.getElementById("game_iframe").src = $scope.gameUrl;
+          }
+        }
       });
     };
 
@@ -165,19 +197,29 @@ angular.module('myApp', [])
         $scope.response = angular.toJson(response, true);
         // if there is a match that is joinable
         if(response[0].matches.length > 0){
-          $scope.showGame = true;
           // setting this boolean to prevent $scope.watch from changing the history
           $scope.noMatches = true;
           $scope.matchId = response[0].matches[0].matchId;
           $scope.history = response[0].matches[0].history;
           $scope.yourPlayerIndex = 1;
         }else{ // you are creating a match
-          $scope.showGame = true;
           $scope.openingMove = true;
           $scope.yourPlayerIndex = 0;
+          $scope.history = null;
         }
         // this is the operation that finally loads the game into the iframe
-        $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
+        
+        if($scope.gameUrl){
+          $scope.showGame = false;
+          $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
+          document.getElementById("game_iframe").src = $scope.gameUrl;
+        }else{
+          $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);  
+        }
+        
+        $timeout(function(){
+          $scope.showGame = true;
+        }, 500);
       });
     };
 
@@ -233,7 +275,7 @@ angular.module('myApp', [])
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
         $scope.history = response[0].matches[0].history;
-
+        $scope.getMyMatches();
         var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
         var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
         platformMessageService.sendMessage({ // must check if the move is ok
@@ -440,6 +482,19 @@ angular.module('myApp', [])
     return function (exception, cause) {
       exception.message += ' (caused by "' + cause + '")';
       $window.alert(exception.message);
-      throw exception;
+      // var message = [
+      //   {
+      //     emailJavaScriptError: {
+      //       gameDeveloperEmail: $rootScope.gameInfo.gameDeveloperEmail, 
+      //       emailSubject: "[ERROR] x [SMGPLATFORM] " + $rootScope.gameInfo.languageToGameName.en, 
+      //       emailBody: "Your game had the following error: <br>" + exception.message
+      //     }
+      //   }
+      // ];
+      // serverApiService.sendMessage(message, function (response) {
+      //   $scope.response = angular.toJson(response, true);
+      //   $window.alert(exception.message);
+      //   throw exception;
+      // });
     };
   });

@@ -2,7 +2,7 @@
 <html lang="en" ng-app="myApp">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>GroupProj - v003</title>
+  <title>GroupProj - v004</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="main.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
@@ -30,11 +30,9 @@
     <option value="">Select A Match!</option>
   </select>
   <br>
+  {{endScore}}
+  <br>
   <iframe frameborder="1" id="game_iframe" ng-src="{{gameUrl}}" scrolling="no" seamless="seamless" ng-show="showGame"></iframe>
-  <!-- <ul ng-show="gameId != null">
-    {{myMatches == null || myMatches.length == 0 ? 'you don\'t have any matches!' : ''}}
-    <li ng-repeat="match in myMatches track by $index" ng-click="loadMatchFromMatchList(match.matchId)">created @ {{match.createdTimestampMillis}}</li>
-  </ul> -->
   
   <br>
 </body>

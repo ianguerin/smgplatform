@@ -8,7 +8,8 @@ angular.module('myApp', [])
     $scope.showGame = false;
     $scope.openingMove = false;
     $scope.playerInfo = null;
-    $scope.noMatches = false;
+    $scope.noMatches = false; // this is used solely to prevent double updating the matchId
+    $scope.endScore = [];
     var gameUrl;
 
     // check to see if user is already logged in
@@ -285,7 +286,9 @@ angular.module('myApp', [])
             var turnIndexAfter = $scope.getTurnIndex(i);
             var endScore = $scope.isGameOver();
             if(endScore.length == 2){
-              alert("game has ended");
+              $scope.endScore = endScore;
+            }else{
+              $scope.endScore = [];
             }
             var stateBefore;
             if(i == 0){

@@ -40,6 +40,28 @@ angular.module('myApp', [])
       }
     }, true);
 
+    $scope.$watch("matchId", function (newValue, oldValue) {
+      if(newValue == null){
+        return;
+      }else{
+        var matchId = newValue;
+        var matchIndex = $scope.getMatchIndex(matchId);
+        if(matchIndex == -1){
+          return;
+        }
+        $scope.matchId = matchId;
+        $scope.history = $scope.myMatches[matchIndex].history;
+        var yourPlayerIndex = $scope.getYourPlayerIndexForMatchIndex(matchIndex);
+        if(yourPlayerIndex == -1){
+          return;
+        }
+        $scope.yourPlayerIndex = yourPlayerIndex;
+        $scope.showGame = true;
+        // this is the operation that finally loads the game into the iframe
+        $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
+      }
+    }, true);
+
     // get a playerId and accessSignature for player
     $scope.registerPlayerAsGuest = function () {
       var displayName = "Guest-" + Math.floor(Math.random()*1000);
@@ -133,6 +155,7 @@ angular.module('myApp', [])
           $scope.openingMove = true;
           $scope.yourPlayerIndex = 0;
         }
+        // this is the operation that finally loads the game into the iframe
         $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
       });
     };
@@ -312,6 +335,7 @@ angular.module('myApp', [])
     * helper methods
     */
     $scope.getTurnIndex = function(moveIndex){
+      // lets be sure history is defined
       if(!$scope.history){
         return -1;
       }
@@ -320,11 +344,36 @@ angular.module('myApp', [])
         return 0;
       }
       for(var i = 0; i < $scope.history.moves[moveIndex].length; i++){
-          if($scope.history.moves[moveIndex][i].setTurn !== undefined){
-              return $scope.history.moves[moveIndex][i].setTurn.turnIndex;
-          }
+        if($scope.history.moves[moveIndex][i].setTurn !== undefined){
+            return $scope.history.moves[moveIndex][i].setTurn.turnIndex;
         }
+      }
+    };
+
+    $scope.getMatchIndex = function(matchId){
+      // lets be sure myMatches is defined
+      if(!$scope.myMatches){
+        return -1;
+      }
+      for(var i = 0; i < $scope.myMatches.length; i++){
+        if($scope.myMatches[i].matchId == matchId){
+          return i;
+        }
+      }
+    };
+
+    $scope.getYourPlayerIndexForMatchIndex = function(matchIndex){
+      if(!$scope.myMatches){
+        return -1;
+      }
+      var match = $scope.myMatches[matchIndex];
+      for(var i = 0; i < match.playersInfo.length; i++){
+        if(match.playersInfo[i].playerId == $scope.playerInfo.myPlayerId){
+          return i;
+        }
+      }
     }
+
 
     // this is just to verify local storage is working
     $scope.checkIdAndSig = function(){

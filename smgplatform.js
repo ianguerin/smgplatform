@@ -8,6 +8,7 @@ angular.module('myApp', [])
     $scope.showGame = false;
     $scope.openingMove = false;
     $scope.playerInfo = null;
+    $scope.noMatches = false;
     var gameUrl;
 
     // check to see if user is already logged in
@@ -45,7 +46,11 @@ angular.module('myApp', [])
     }, true);
 
     $scope.$watch("matchId", function (newValue, oldValue) {
-      if(newValue == null){
+      if(newValue == null || $scope.noMatches){
+        if($scope.noMatches){
+          // safe to set it back to false
+          $scope.noMatches = false;
+        }
         return;
       }else{
         if(!$scope.loggedIn){
@@ -160,6 +165,8 @@ angular.module('myApp', [])
         // if there is a match that is joinable
         if(response[0].matches.length > 0){
           $scope.showGame = true;
+          // setting this boolean to prevent $scope.watch from changing the history
+          $scope.noMatches = true;
           $scope.matchId = response[0].matches[0].matchId;
           $scope.history = response[0].matches[0].history;
           $scope.yourPlayerIndex = 1;
@@ -191,6 +198,7 @@ angular.module('myApp', [])
       ];
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
+        $scope.noMatches = true;
         $scope.matchId = response[0].matches[0].matchId;
         $scope.history = response[0].matches[0].history;
 

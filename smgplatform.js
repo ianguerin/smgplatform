@@ -323,6 +323,12 @@ angular.module('myApp', [])
           var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
           var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
 
+          // is this necessary?
+          var endScore = $scope.isGameOverFromMove(move);
+          if(!(endScore.length == 2)){
+            endScore = null;
+          }
+
           platformMessageService.sendMessage({// must update the UI after realizing a move is OK
             updateUI : {
               move : move,
@@ -400,9 +406,18 @@ angular.module('myApp', [])
     }
 
     $scope.isGameOver = function(){
-      for(var i = 0; i < $scope.history.moves[$scope.history.moves.length].length; i++){
-        if($scope.history.moves[$scope.history.moves.length][i].endMatch !== undefined){
-          return $scope.history.moves[$scope.history.moves.length][i].endMatch.endMatchScores;
+      for(var i = 0; i < $scope.history.moves[$scope.history.moves.length - 1].length; i++){
+        if($scope.history.moves[$scope.history.moves.length - 1][i].endMatch !== undefined){
+          return $scope.history.moves[$scope.history.moves.length - 1][i].endMatch.endMatchScores;
+        }
+      }
+      return [];
+    }
+
+    $scope.isGameOverFromMove = function(move){
+      for(var i = 0; i < move.length; i++){
+        if(move[i].endMatch !== undefined){
+          return move[i].endMatch.endMatchScores;
         }
       }
       return [];

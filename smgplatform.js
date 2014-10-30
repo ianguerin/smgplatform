@@ -2,7 +2,7 @@
 
 angular.module('myApp', [])
   .controller('Ctrl', 
-    function ($sce, $scope, $log, $window, $timeout, serverApiService, platformMessageService, featureService) {
+    function ($sce, $scope, $log, $window, $timeout, $rootScope, serverApiService, platformMessageService, featureService) {
 
     // lets get some flags & args
     featureService.init();
@@ -25,6 +25,8 @@ angular.module('myApp', [])
       $scope.loggedIn = false;
     }
 
+    // $rootScope.eagle = "eagle";
+    // throw "eagle error";
     /*
     * functions that interact with the server
     */
@@ -103,11 +105,13 @@ angular.module('myApp', [])
     $scope.registerPlayerAsGuest = function () {
       var displayName = "Guest-" + Math.floor(Math.random()*1000);
 
+      var imgUrl = "images/avatar" + Math.floor(Math.random()*5) + ".png";
+
       var message = [ // REGISTER_PLAYER
         {
           registerPlayer: {
             displayName: displayName, 
-            avatarImageUrl: "images/avatar0.png"
+            avatarImageUrl: imgUrl
           }
         }
       ];
@@ -478,23 +482,27 @@ angular.module('myApp', [])
     };
 
   })
-  .factory('$exceptionHandler', function ($window, $scope, $rootScope) {
+  .factory('$exceptionHandler', function ($window, $injector) {
     return function (exception, cause) {
-      exception.message += ' (caused by "' + cause + '")';
+      // exception.message += ' (caused by "' + cause + '")';
       $window.alert(exception.message);
-       var message = [
-         {
-           emailJavaScriptError: {
-             gameDeveloperEmail: $rootScope.gameInfo.gameDeveloperEmail, 
-             emailSubject: "[ERROR] x [SMGPLATFORM] " + $rootScope.gameInfo.languageToGameName.en, 
-             emailBody: "Your game had the following error: <br>" + exception.message
-           }
-         }
-       ];
-       serverApiService.sendMessage(message, function (response) {
-         $scope.response = angular.toJson(response, true);
-         $window.alert(exception.message);
-         throw exception;
-       });
+      var scope = $injector.get("$rootScope");
+      // var serverApiService = $injector.get("serverApiService");
+      // console.log(scope);
+      // console.log(serverApiService);
+      //  var message = [
+      //    {
+      //      emailJavaScriptError: {
+      //        gameDeveloperEmail: scope.eagle, 
+      //        emailSubject: "[ERROR] x [SMGPLATFORM] " + scope.eagle, 
+      //        emailBody: "Your game had the following error: <br>" + exception.message
+      //      }
+      //    }
+      //  ];
+      //  serverApiService.sendMessage(message, function (response) {
+      //    $scope.response = angular.toJson(response, true);
+      //    $window.alert(exception.message);
+      //    throw exception;
+      //  });
     };
   });

@@ -478,23 +478,23 @@ angular.module('myApp', [])
     };
 
   })
-  .factory('$exceptionHandler', function ($window) {
+  .factory('$exceptionHandler', function ($window, $scope, $rootScope) {
     return function (exception, cause) {
       exception.message += ' (caused by "' + cause + '")';
       $window.alert(exception.message);
-      // var message = [
-      //   {
-      //     emailJavaScriptError: {
-      //       gameDeveloperEmail: $rootScope.gameInfo.gameDeveloperEmail, 
-      //       emailSubject: "[ERROR] x [SMGPLATFORM] " + $rootScope.gameInfo.languageToGameName.en, 
-      //       emailBody: "Your game had the following error: <br>" + exception.message
-      //     }
-      //   }
-      // ];
-      // serverApiService.sendMessage(message, function (response) {
-      //   $scope.response = angular.toJson(response, true);
-      //   $window.alert(exception.message);
-      //   throw exception;
-      // });
+       var message = [
+         {
+           emailJavaScriptError: {
+             gameDeveloperEmail: $rootScope.gameInfo.gameDeveloperEmail, 
+             emailSubject: "[ERROR] x [SMGPLATFORM] " + $rootScope.gameInfo.languageToGameName.en, 
+             emailBody: "Your game had the following error: <br>" + exception.message
+           }
+         }
+       ];
+       serverApiService.sendMessage(message, function (response) {
+         $scope.response = angular.toJson(response, true);
+         $window.alert(exception.message);
+         throw exception;
+       });
     };
   });

@@ -283,6 +283,10 @@ angular.module('myApp', [])
           for(var i = 0; i < $scope.history.moves.length; i++){
             var turnIndexBefore = $scope.getTurnIndex(i-1);
             var turnIndexAfter = $scope.getTurnIndex(i);
+            var endScore = $scope.isGameOver();
+            if(endScore.length == 2){
+              alert("game has ended");
+            }
             var stateBefore;
             if(i == 0){
               stateBefore = {};
@@ -395,6 +399,14 @@ angular.module('myApp', [])
       }
     }
 
+    $scope.isGameOver = function(){
+      for(var i = 0; i < $scope.history.moves[$scope.history.moves.length].length; i++){
+        if($scope.history.moves[$scope.history.moves.length][i].endMatch !== undefined){
+          return $scope.history.moves[$scope.history.moves.length][i].endMatch.endMatchScores;
+        }
+      }
+      return [];
+    }
 
     // this is just to verify local storage is working
     $scope.checkIdAndSig = function(){

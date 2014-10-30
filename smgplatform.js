@@ -25,6 +25,10 @@ angular.module('myApp', [])
     // if gameId is updated, then fetch my list of matches that correspond to the new gameID
     $scope.$watch("gameId", function (newValue, oldValue) {
       if($scope.gameId != null){
+      if(!$scope.loggedIn){
+        alert("log in first!");
+        return;
+      }
         var message = [ // GET_GAMES
           {
             getGames: {
@@ -44,6 +48,9 @@ angular.module('myApp', [])
       if(newValue == null){
         return;
       }else{
+        if(!$scope.loggedIn){
+          return;
+        } 
         var matchId = newValue;
         var matchIndex = $scope.getMatchIndex(matchId);
         if(matchIndex == -1){
@@ -81,11 +88,17 @@ angular.module('myApp', [])
         
         window.localStorage.setItem("playerInfo", angular.toJson(response[0].playerInfo, true));
         $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
+
+        // MUST CALL getGames AGAIN!
+        $scope.getGames();
       });
     };
 
     // ask server for a list of all the games in the server's library
     $scope.getGames = function(){
+      if(!$scope.loggedIn){
+        return;
+      }
       var message = [ // GET_GAMES
         {
           getGames: {}

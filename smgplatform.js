@@ -356,50 +356,46 @@ angular.module('myApp', [])
           }
         }
       }else if(message.isMoveOkResult !== undefined) { // this executes when an isMoveOkResult message is sent
-        if (message.isMoveOkResult !== true) {
-          $window.alert("isMoveOk returned " + message.isMoveOkResult);
+        var stateAfter = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 1];
+        var stateBefore;
+
+        if($scope.history.moves.length > 1){
+          stateBefore = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 2];  
         }else{
-          var stateAfter = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 1];
-          var stateBefore;
-
-          if($scope.history.moves.length > 1){
-            stateBefore = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 2];  
-          }else{
-            stateBefore = {};
-          }
-          
-          var move = $scope.history.moves[$scope.history.moves.length - 1];
-          var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
-          var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
-
-          // is this necessary?
-          var endScore = $scope.isGameOverFromMove(move);
-          if(!(endScore.length == 2)){
-            endScore = null;
-          }
-
-          platformMessageService.sendMessage({// must update the UI after realizing a move is OK
-            updateUI : {
-              move : move,
-              turnIndexBeforeMove : turnIndexBefore,
-              turnIndexAfterMove : turnIndexAfter,
-              stateBeforeMove : stateBefore,
-              stateAfterMove : stateAfter,
-              yourPlayerIndex : $scope.yourPlayerIndex,
-              playersInfo : [
-                {
-                  playerId: $scope.playerInfo.myPlayerId, 
-                  displayName: $scope.playerInfo.displayName, 
-                  avatarImageUrl: $scope.playerInfo.avatarImageUrl
-                }, 
-                {
-                  playerId : null
-                }
-              ],
-              endMatchScores: null
-            }
-          });
+          stateBefore = {};
         }
+        
+        var move = $scope.history.moves[$scope.history.moves.length - 1];
+        var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
+        var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
+
+        // is this necessary?
+        var endScore = $scope.isGameOverFromMove(move);
+        if(!(endScore.length == 2)){
+          endScore = null;
+        }
+
+        platformMessageService.sendMessage({// must update the UI after realizing a move is OK
+          updateUI : {
+            move : move,
+            turnIndexBeforeMove : turnIndexBefore,
+            turnIndexAfterMove : turnIndexAfter,
+            stateBeforeMove : stateBefore,
+            stateAfterMove : stateAfter,
+            yourPlayerIndex : $scope.yourPlayerIndex,
+            playersInfo : [
+              {
+                playerId: $scope.playerInfo.myPlayerId, 
+                displayName: $scope.playerInfo.displayName, 
+                avatarImageUrl: $scope.playerInfo.avatarImageUrl
+              }, 
+              {
+                playerId : null
+              }
+            ],
+            endMatchScores: null
+          }
+        });
       }else if(message.makeMove !== undefined) {
         //send move to server
         if($scope.openingMove){

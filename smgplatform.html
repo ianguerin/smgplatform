@@ -20,15 +20,19 @@
   <span ng-show="loggedIn">{{playerInfo.displayName}}</span>
   <br>
   <button ng-click="registerPlayerAsGuest()">Register Player As Guest</button>
-  <button ng-click="checkIdAndSig()">Check My Credentials</button>
   <button ng-click="reserveAutoMatch()" ng-show="flags.autoMatch">Reserve Auto Match (or make new)!</button>
   <br>
   selected game - {{gameId ? gameId : 'no game selected'}} * matchId - {{matchId ? matchId : 'no match selected'}}
   <br>
+  <div ng-show="flags.matchMenu">
+    <img ng-src="{{myMatches[getMatchIndex(matchId)].playersInfo[1 - yourPlayerIndex].avatarImageUrl}}"/>
+    {{myMatches[getMatchIndex(matchId)].playersInfo[1 - yourPlayerIndex].displayName}}
+    {{myMatches[getMatchIndex(matchId)].summary.turn}}
+  </div>
   Server response:<br>
   <textarea ng-model="response" rows=5 cols=100 readonly></textarea>
   <br>
-  <select ng-model="matchId" ng-options="match.matchId as match.summary for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined">
+  <select ng-model="matchId" ng-options="match.matchId as match.summary.full for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined">
     <option value="">Select A Match!</option>
   </select>
   <br>

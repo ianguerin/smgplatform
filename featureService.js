@@ -30,7 +30,7 @@ angular.module('myApp')
       featureService.flags.listMultiplayerMatches = false;
     }
     if(featureService.args.off && offstring.search('MATCH_MENU') !== -1){
-      featureService.flags.listMultiplayerMatches = false;
+      featureService.flags.matchMenu = false;
     }
    // console.log(flags);
   };

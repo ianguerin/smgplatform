@@ -179,34 +179,36 @@ angular.module('myApp', [])
 
     // create a string that summarizes a match
     $scope.summarizeMyMatches = function(){
+      if($scope.myMatches == undefined){
+        alert("errored, myMatches is not defined");
+      }
       for(var i = 0; i < $scope.myMatches.length; i++){
-        var summary = "";
+        var summary = {turn:"", opponent:"", full: ""};
         var yourPlayerIndex = $scope.getYourPlayerIndexForMatchIndex(i);
         var whosTurn = $scope.getTurnIndex($scope.myMatches[i].history.moves[$scope.myMatches[i].history.moves.length - 1]);
         if(whosTurn == yourPlayerIndex){
-          summary += "Your turn. Opponent: ";
+          summary.turn = "Your turn.";
         }else if((1 - yourPlayerIndex) == whosTurn) {
-          summary += "Their turn. Opponnent: ";
+          summary.turn = "Their turn.";
         }else{
           var endScore = $scope.isGameOverFromMove($scope.myMatches[i].history.moves[$scope.myMatches[i].history.moves.length - 1]);
           if(endScore.length != 2){
             alert("errored while summarizing matches");
           }
           if(endScore[yourPlayerIndex] > endScore[1 - yourPlayerIndex]){
-            summary += "You beat ";  
+            summary.turn = "You won.";  
           }else if(endScore[yourPlayerIndex] < endScore[1 - yourPlayerIndex]){
-            summary += "You lost to ";
+            summary.turn = "You lost.";
           }else{
-            summary += "You tied with ";
+            summary.turn = "You tied.";
           }
         }
-        if($scope.myMatches[i].playersInfo.length == 2){
-          summary += $scope.myMatches[i].playersInfo[1 - yourPlayerIndex].displayName;
-        }else if($scope.myMatches[i].playersInfo.length == 1){
-          summary += "... waiting for opponent";
+        if($scope.myMatches[i].playersInfo[1 - yourPlayerIndex]){
+          summary.opponent = "Playing: " + $scope.myMatches[i].playersInfo[1 - yourPlayerIndex].displayName;
         }else{
-          alert("errored while summarizing matches");
+          summary.opponent += "Playing: No Opponent Yet!";
         }
+        summary.full = summary.turn + " " + summary.opponent;
         $scope.myMatches[i].summary = summary;
       }
     };
@@ -316,6 +318,7 @@ angular.module('myApp', [])
         $scope.response = angular.toJson(response, true);
         $scope.history = response[0].matches[0].history;
         $scope.getMyMatches();
+
         var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
         var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
         platformMessageService.sendMessage({ // must check if the move is ok
@@ -466,9 +469,12 @@ angular.module('myApp', [])
     /*
     * helper methods
     */
-    
+
     $scope.getTurnIndex = function(move){
-      // this means it is the first move;
+      // this means it is the first move
+      if(move === undefined){
+        return 0;
+      }
       for(var i = 0; i < move.length; i++){
         if(move[i].setTurn !== undefined){
             return move[i].setTurn.turnIndex;
@@ -517,15 +523,6 @@ angular.module('myApp', [])
       }
       return [];
     }
-
-    // this is just to verify local storage is working
-    $scope.checkIdAndSig = function(){
-      if(!$scope.loggedIn){
-        alert("log in first!");
-        return;
-      }
-      alert($scope.playerInfo.myPlayerId + " " + $scope.playerInfo.accessSignature);
-    };
 
   })
   .factory('$exceptionHandler', function ($window, $injector) {

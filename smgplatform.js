@@ -6,8 +6,11 @@ angular.module('myApp', [])
 
     // lets get some flags & args
     featureService.init();
-    // console.log(featureService.flags);  
-    // console.log(featureService.args);  
+    if(featureService.args.gameId === undefined){
+      alert("you must include a game id in the url... ianguerin.github.io/smgplatform/smgplatform.html?gameId=1234");
+    }
+    console.log(featureService.flags); 
+    console.log(featureService.args);  
 
     // initializing some global variables
     $scope.showGame = false;
@@ -17,16 +20,10 @@ angular.module('myApp', [])
     $scope.endScore = [];
     var gameUrl;
 
-    // check to see if user is already logged in
-    if(window.localStorage.getItem("playerInfo")){
-      $scope.loggedIn = true;
-      $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
-    }else{
-      $scope.loggedIn = false;
-    }
-
+    // going to use this for emailjserrors
     // $rootScope.eagle = "eagle";
     // throw "eagle error";
+
     /*
     * functions that interact with the server
     */
@@ -34,10 +31,10 @@ angular.module('myApp', [])
     // if gameId is updated, then fetch my list of matches that correspond to the new gameID
     $scope.$watch("gameId", function (newValue, oldValue) {
       if($scope.gameId != null){
-      if(!$scope.loggedIn){
-        alert("log in first!");
-        return;
-      }
+        if(!$scope.loggedIn){
+          alert("log in first!");
+          return;
+        }
 
         var message = [ // GET_GAMES
           {
@@ -105,7 +102,7 @@ angular.module('myApp', [])
     $scope.registerPlayerAsGuest = function () {
       var displayName = "Guest-" + Math.floor(Math.random()*1000);
 
-      var imgUrl = "images/avatar" + Math.floor(Math.random()*5) + ".png";
+      var imgUrl = "images/avatar" + Math.floor(Math.random()*10) + ".gif";
 
       var message = [ // REGISTER_PLAYER
         {
@@ -127,9 +124,25 @@ angular.module('myApp', [])
           window.location.reload();
         }
         // MUST CALL getGames AGAIN!
-        $scope.getGames();
+        $scope.gameId = featureService.args.gameId;
+        document.getElementById("logging-in-loader").style.display = "none";
       });
     };
+
+    // check to see if user is already logged in
+    if(window.localStorage.getItem("playerInfo")){
+      $scope.loggedIn = true;
+      $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
+      $scope.gameId = featureService.args.gameId;
+      document.body.style.display = "block";
+    }else{
+      $scope.loggedIn = false;
+      // set gameid in the register player as guest call back
+      $scope.registerPlayerAsGuest();
+      // showing loading gif
+      document.body.style.display = "block";
+      document.getElementById("logging-in-loader").style.display = "block";
+    }
 
     // ask server for a list of all the games in the server's library
     $scope.getGames = function(){
@@ -327,6 +340,7 @@ angular.module('myApp', [])
           });
         }else{ // this executes when you load a game that already has moves on it
           // add last game state to board
+          // maybe put this in its own function, as moving back and forth through history as well as auto refresh will use it
           var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
           var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
           var endScore = $scope.isGameOver();
@@ -479,7 +493,7 @@ angular.module('myApp', [])
   })
   .factory('$exceptionHandler', function ($window, $injector) {
     return function (exception, cause) {
-      // exception.message += ' (caused by "' + cause + '")';
+      exception.message += ' (caused by "' + cause + '")';
       $window.alert(exception.message);
       var scope = $injector.get("$rootScope");
       // var serverApiService = $injector.get("serverApiService");

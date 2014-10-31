@@ -7,6 +7,10 @@ html, body {
   overflow: hidden;
 }
 
+body{
+  display: none;
+}
+
 iframe{
   height: 70%;
   width: 70%;
@@ -16,4 +20,29 @@ iframe{
 li{
   text-decoration: underline;
   cursor: pointer;
+}
+
+#logging-in-loader{
+  display: none;
+  width:100%;
+  height:100%;
+  background-color: rgba(255,255,255,.9);
+  position: absolute;
+  top:0;
+  left:0;
+  z-index: 100;
+}
+#logging-in-loader img{
+  margin: 0 auto;
+  display: block;
+  width:75px;
+  height: 75px;
+  opacity: .5;
+}
+#logging-in-loader span{
+  opacity: .5;
+  display: block;
+  margin: 0 auto;
+  width: 75px;
+  text-align: center;
 }

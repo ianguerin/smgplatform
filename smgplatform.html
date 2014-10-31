@@ -12,6 +12,10 @@
   <script src="featureService.js"></script>
 </head>
 <body ng-cloak ng-controller="Ctrl">
+  <div id="logging-in-loader">
+    <img src="images/logging-in-loader.gif"/>
+    <span>logging in</span>
+  </div>
   <img ng-src="{{playerInfo.avatarImageUrl}}" ng-show="loggedIn"/>
   <span ng-show="loggedIn">{{playerInfo.displayName}}</span>
   <br>
@@ -24,9 +28,6 @@
   Server response:<br>
   <textarea ng-model="response" rows=5 cols=100 readonly></textarea>
   <br>
-  <select ng-model="gameId" ng-options="game.gameId as game.languageToGameName.en for game in games">
-    <option value="">Select A Game</option>
-  </select>
   <select ng-model="matchId" ng-options="match.matchId as match.createdTimestampMillis for match in myMatches">
     <option value="">Select A Match!</option>
   </select>

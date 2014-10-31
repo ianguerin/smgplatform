@@ -2,7 +2,7 @@
 <html lang="en" ng-app="myApp">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>GroupProj - v005</title>
+  <title>GroupProj - v006</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="main.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
@@ -21,14 +21,14 @@
   <br>
   <button ng-click="registerPlayerAsGuest()">Register Player As Guest</button>
   <button ng-click="checkIdAndSig()">Check My Credentials</button>
-  <button ng-click="reserveAutoMatch()">Reserve Auto Match (or make new)!</button>
+  <button ng-click="reserveAutoMatch()" ng-show="flags.autoMatch">Reserve Auto Match (or make new)!</button>
   <br>
   selected game - {{gameId ? gameId : 'no game selected'}} * matchId - {{matchId ? matchId : 'no match selected'}}
   <br>
   Server response:<br>
   <textarea ng-model="response" rows=5 cols=100 readonly></textarea>
   <br>
-  <select ng-model="matchId" ng-options="match.matchId as match.createdTimestampMillis for match in myMatches">
+  <select ng-model="matchId" ng-options="match.matchId as match.summary for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined">
     <option value="">Select A Match!</option>
   </select>
   <br>

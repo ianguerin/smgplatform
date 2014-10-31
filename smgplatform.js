@@ -4,11 +4,12 @@ angular.module('myApp', [])
   .controller('Ctrl', 
     function ($sce, $scope, $log, $window, $timeout, $rootScope, serverApiService, platformMessageService, featureService) {
 
-    // lets get some flags & args
+    // lets get some flags and args
     featureService.init();
     if(featureService.args.gameId === undefined){
       alert("you must include a game id in the url... ianguerin.github.io/smgplatform/smgplatform.html?gameId=1234");
     }
+    
     console.log(featureService.flags); 
     console.log(featureService.args);  
 
@@ -18,6 +19,8 @@ angular.module('myApp', [])
     $scope.playerInfo = null;
     $scope.noMatches = false; // this is used solely to prevent double updating the matchId
     $scope.endScore = [];
+    $scope.flags = featureService.flags;
+
     var gameUrl;
 
     // going to use this for emailjserrors
@@ -129,21 +132,6 @@ angular.module('myApp', [])
       });
     };
 
-    // check to see if user is already logged in
-    if(window.localStorage.getItem("playerInfo")){
-      $scope.loggedIn = true;
-      $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
-      $scope.gameId = featureService.args.gameId;
-      document.body.style.display = "block";
-    }else{
-      $scope.loggedIn = false;
-      // set gameid in the register player as guest call back
-      $scope.registerPlayerAsGuest();
-      // showing loading gif
-      document.body.style.display = "block";
-      document.getElementById("logging-in-loader").style.display = "block";
-    }
-
     // ask server for a list of all the games in the server's library
     $scope.getGames = function(){
       if(!$scope.loggedIn){
@@ -180,12 +168,47 @@ angular.module('myApp', [])
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
         $scope.myMatches = response[0].matches;
+        $scope.summarizeMyMatches();
         if(!angular.equals($scope.myMatches, response[0].matches)){
           if($scope.gameUrl){
             document.getElementById("game_iframe").src = $scope.gameUrl;
           }
         }
       });
+    };
+
+    // create a string that summarizes a match
+    $scope.summarizeMyMatches = function(){
+      for(var i = 0; i < $scope.myMatches.length; i++){
+        var summary = "";
+        var yourPlayerIndex = $scope.getYourPlayerIndexForMatchIndex(i);
+        var whosTurn = $scope.getTurnIndex($scope.myMatches[i].history.moves[$scope.myMatches[i].history.moves.length - 1]);
+        if(whosTurn == yourPlayerIndex){
+          summary += "Your turn. Opponent: ";
+        }else if((1 - yourPlayerIndex) == whosTurn) {
+          summary += "Their turn. Opponnent: ";
+        }else{
+          var endScore = $scope.isGameOverFromMove($scope.myMatches[i].history.moves[$scope.myMatches[i].history.moves.length - 1]);
+          if(endScore.length != 2){
+            alert("errored while summarizing matches");
+          }
+          if(endScore[yourPlayerIndex] > endScore[1 - yourPlayerIndex]){
+            summary += "You beat ";  
+          }else if(endScore[yourPlayerIndex] < endScore[1 - yourPlayerIndex]){
+            summary += "You lost to ";
+          }else{
+            summary += "You tied with ";
+          }
+        }
+        if($scope.myMatches[i].playersInfo.length == 2){
+          summary += $scope.myMatches[i].playersInfo[1 - yourPlayerIndex].displayName;
+        }else if($scope.myMatches[i].playersInfo.length == 1){
+          summary += "... waiting for opponent";
+        }else{
+          alert("errored while summarizing matches");
+        }
+        $scope.myMatches[i].summary = summary;
+      }
     };
 
     // if player has selected a game, find a match to join, or create a new match
@@ -225,7 +248,6 @@ angular.module('myApp', [])
           $scope.history = null;
         }
         // this is the operation that finally loads the game into the iframe
-        
         if($scope.gameUrl){
           $scope.showGame = false;
           $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
@@ -264,7 +286,7 @@ angular.module('myApp', [])
 
         // this seems like a LOT of work to find turn index
         // I use zero because I know it is the first entry
-        var turnIndexAfter = $scope.getTurnIndex(0);
+        var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[0]);
         platformMessageService.sendMessage({ // must check if the move is ok
           isMoveOk: {
             move: move,
@@ -277,6 +299,7 @@ angular.module('myApp', [])
       });
     };
 
+    // sends move in a game that already has been created on the server
     $scope.sendMoveToServer = function(move){
       var message = [ // MADE_MOVE
         {
@@ -293,8 +316,8 @@ angular.module('myApp', [])
         $scope.response = angular.toJson(response, true);
         $scope.history = response[0].matches[0].history;
         $scope.getMyMatches();
-        var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
-        var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
+        var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
+        var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
         platformMessageService.sendMessage({ // must check if the move is ok
           isMoveOk: {
             move: move,
@@ -309,8 +332,28 @@ angular.module('myApp', [])
     };
 
     /*
+    * log in initializations
+    */
+
+    if(window.localStorage.getItem("playerInfo")){
+      $scope.loggedIn = true;
+      $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
+      $scope.gameId = featureService.args.gameId;
+      document.body.style.display = "block";
+    }else{
+      $scope.loggedIn = false;
+      // set gameid in the register player as guest call back
+      $scope.registerPlayerAsGuest();
+      // showing loading gif
+      document.body.style.display = "block";
+      document.getElementById("logging-in-loader").style.display = "block";
+    }
+
+
+    /*
     * platform interaction
     */
+
     var gotGameReady = false;
     platformMessageService.addMessageListener(function (message) {
       if(message.gameReady !== undefined){// this executes when the game emits a message that it has been loaded
@@ -341,8 +384,8 @@ angular.module('myApp', [])
         }else{ // this executes when you load a game that already has moves on it
           // add last game state to board
           // maybe put this in its own function, as moving back and forth through history as well as auto refresh will use it
-          var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
-          var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
+          var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
+          var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
           var endScore = $scope.isGameOver();
           if(endScore.length == 2){
             $scope.endScore = endScore;
@@ -379,8 +422,8 @@ angular.module('myApp', [])
         }
         
         var move = $scope.history.moves[$scope.history.moves.length - 1];
-        var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
-        var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
+        var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
+        var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
 
         // is this necessary?
         var endScore = $scope.isGameOverFromMove(move);
@@ -423,18 +466,12 @@ angular.module('myApp', [])
     /*
     * helper methods
     */
-    $scope.getTurnIndex = function(moveIndex){
-      // lets be sure history is defined
-      if(!$scope.history){
-        return -1;
-      }
+    
+    $scope.getTurnIndex = function(move){
       // this means it is the first move;
-      if(moveIndex < 0){
-        return 0;
-      }
-      for(var i = 0; i < $scope.history.moves[moveIndex].length; i++){
-        if($scope.history.moves[moveIndex][i].setTurn !== undefined){
-            return $scope.history.moves[moveIndex][i].setTurn.turnIndex;
+      for(var i = 0; i < move.length; i++){
+        if(move[i].setTurn !== undefined){
+            return move[i].setTurn.turnIndex;
         }
       }
     };

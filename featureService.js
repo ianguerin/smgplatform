@@ -7,7 +7,7 @@ angular.module('myApp')
   this.args = {};
   this.init = function(){  
     //Set all feature flags to on (by default) here
-    featureService.flags = {'automatch':1,'emailJsErrors':1,'rflag1':1,'rflag2':1};
+    featureService.flags = {'autoMatch':true,'emailJsErrors':true,'listMultiplayerMatches':true,'matchMenu':true};
     
     var platformUrl = $window.location.search;
     var gameUrl = platformUrl.substring(1);
@@ -21,10 +21,16 @@ angular.module('myApp')
     
     var offstring = featureService.args.off;
     if(featureService.args.off && offstring.search('AUTO_MATCH')!== -1){
-      featureService.flags.automatch = 0;
+      featureService.flags.autoMatch = false;
     }
     if(featureService.args.off && offstring.search('EMAIL_JS_ERRORS') !== -1){
-      featureService.flags.emailJsErrors = 0;
+      featureService.flags.emailJsErrors = false;
+    }
+    if(featureService.args.off && offstring.search('LIST_MULTIPLAYER_MATCHES') !== -1){
+      featureService.flags.listMultiplayerMatches = false;
+    }
+    if(featureService.args.off && offstring.search('MATCH_MENU') !== -1){
+      featureService.flags.listMultiplayerMatches = false;
     }
    // console.log(flags);
   };

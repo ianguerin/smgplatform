@@ -6,9 +6,6 @@ angular.module('myApp', [])
 
     // lets get some flags and args
     featureService.init();
-    if(featureService.args.gameId === undefined){
-      alert("you must include a game id in the url... ianguerin.github.io/smgplatform/smgplatform.html?gameId=1234");
-    }
     
     console.log(featureService.flags); 
     console.log(featureService.args);  
@@ -337,8 +334,9 @@ angular.module('myApp', [])
     /*
     * log in initializations
     */
-
-    if(window.localStorage.getItem("playerInfo")){
+    if(featureService.args.gameId === undefined){
+      alert("you must include a game id in the url... ianguerin.github.io/smgplatform/smgplatform.html?gameId=1234");  
+    }else if(window.localStorage.getItem("playerInfo")){
       $scope.loggedIn = true;
       $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
       $scope.gameId = featureService.args.gameId;

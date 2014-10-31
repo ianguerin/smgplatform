@@ -326,34 +326,33 @@ angular.module('myApp', [])
             }
           });
         }else{ // this executes when you load a game that already has moves on it
-          // go through each move in the history and check them and then execute them
-          for(var i = 0; i < $scope.history.moves.length; i++){
-            var turnIndexBefore = $scope.getTurnIndex(i-1);
-            var turnIndexAfter = $scope.getTurnIndex(i);
-            var endScore = $scope.isGameOver();
-            if(endScore.length == 2){
-              $scope.endScore = endScore;
-            }else{
-              $scope.endScore = [];
-            }
-            var stateBefore;
-            if(i == 0){
-              stateBefore = {};
-            }else{
-              stateBefore = $scope.history.stateAfterMoves[i-1];
-            }
-            var stateAfter = $scope.history.stateAfterMoves[i];
-            
-            platformMessageService.sendMessage({
-              isMoveOk: {
-                move: $scope.history.moves[i],
-                stateAfterMove: stateAfter,
-                stateBeforeMove: stateBefore,
-                turnIndexBeforeMove: turnIndexBefore,
-                turnIndexAfterMove: turnIndexAfter
-              }
-            });
+          // add last game state to board
+          var turnIndexBefore = $scope.getTurnIndex($scope.history.moves.length - 2);
+          var turnIndexAfter = $scope.getTurnIndex($scope.history.moves.length - 1);
+          var endScore = $scope.isGameOver();
+          if(endScore.length == 2){
+            $scope.endScore = endScore;
+          }else{
+            $scope.endScore = [];
           }
+          var stateBefore;
+          // this is the first move on the board
+          if($scope.history.moves.length == 1){
+            stateBefore = {};
+          }else{
+            stateBefore = $scope.history.stateAfterMoves[$scope.history.moves.length - 2];
+          }
+          var stateAfter = $scope.history.stateAfterMoves[$scope.history.moves.length - 1];
+          
+          platformMessageService.sendMessage({
+            isMoveOk: {
+              move: $scope.history.moves[$scope.history.moves.length - 1],
+              stateAfterMove: stateAfter,
+              stateBeforeMove: stateBefore,
+              turnIndexBeforeMove: turnIndexBefore,
+              turnIndexAfterMove: turnIndexAfter
+            }
+          });
         }
       }else if(message.isMoveOkResult !== undefined) { // this executes when an isMoveOkResult message is sent
         var stateAfter = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 1];

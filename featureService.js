@@ -7,7 +7,7 @@ angular.module('myApp')
   this.args = {};
   this.init = function(){  
     //Set all feature flags to on (by default) here
-    featureService.flags = {'autoMatch':true,'emailJsErrors':true,'listMultiplayerMatches':true,'matchMenu':true};
+    featureService.flags = {'autoMatch':true,'emailJsErrors':true,'listMultiplayerMatches':true,'matchMenu':true, 'autoRefresh':true};
     
     var platformUrl = $window.location.search;
     var gameUrl = platformUrl.substring(1);
@@ -31,6 +31,9 @@ angular.module('myApp')
     }
     if(featureService.args.off && offstring.search('MATCH_MENU') !== -1){
       featureService.flags.matchMenu = false;
+    }
+    if(featureService.args.off && offstring.search('AUTO_REFRESH')!== -1){
+      featureService.flags.autoRefresh = false;
     }
   };
 }); 

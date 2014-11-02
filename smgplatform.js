@@ -2,7 +2,7 @@
 
 angular.module('myApp', [])
   .controller('Ctrl', 
-    function ($sce, $scope, $log, $window, $timeout, $rootScope, serverApiService, platformMessageService, featureService) {
+    function ($sce, $scope, $log, $window, $timeout, $interval, $rootScope, serverApiService, platformMessageService, featureService) {
 
     // lets get some flags and args
     featureService.init();
@@ -19,6 +19,7 @@ angular.module('myApp', [])
     $scope.flags = featureService.flags;
 
     var gameUrl;
+    var dateObj;
 
     /*
     * functions that interact with the server
@@ -165,6 +166,8 @@ angular.module('myApp', [])
         $scope.response = angular.toJson(response, true);
         $window.lastResponse = response[0];
         $scope.myMatches = response[0].matches;
+        dateObj = new Date();
+        $scope.lastCheckForUpdates = dateObj.getTime();
         $scope.summarizeMyMatches();
         if(!angular.equals($scope.myMatches, response[0].matches)){
           if($scope.gameUrl){
@@ -334,6 +337,7 @@ angular.module('myApp', [])
       });
     };
 
+    // alert the developer of an error
     $scope.sendEmailJsError = function(message){
       message = [message];
       serverApiService.sendMessage(message, function (response) {
@@ -343,11 +347,85 @@ angular.module('myApp', [])
       });
     };
 
+    // update the board with new states, called by autorefresh and on loading a match into the iframe
+    $scope.updateTheBoard = function(){
+      console.log("updating the board");
+      console.log($scope.history);
+      var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
+      var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
+      var endScore = $scope.isGameOver();
+      if(endScore.length == 2){
+        $scope.endScore = endScore;
+      }else{
+        $scope.endScore = [];
+      }
+      var stateBefore;
+      // this is the first move on the board
+      if($scope.history.moves.length == 1){
+        stateBefore = {};
+      }else{
+        stateBefore = $scope.history.stateAfterMoves[$scope.history.moves.length - 2];
+      }
+      var stateAfter = $scope.history.stateAfterMoves[$scope.history.moves.length - 1];
+      
+      platformMessageService.sendMessage({
+        isMoveOk: {
+          move: $scope.history.moves[$scope.history.moves.length - 1],
+          stateAfterMove: stateAfter,
+          stateBeforeMove: stateBefore,
+          turnIndexBeforeMove: turnIndexBefore,
+          turnIndexAfterMove: turnIndexAfter
+        }
+      });
+    };
+
+    // auto refresh will look for changes in the matches that you are playing and update your game
+    if($scope.flags.autoRefresh){
+      $interval(function() {
+        if($scope.myMatches !== undefined){
+          console.log("looking after " + $scope.lastCheckForUpdates);
+          var message = [ // GET_PLAYER_MATCHES
+            {
+              getPlayerMatches: {
+                gameId: $scope.gameId, 
+                getCommunityMatches: false,
+                updatedTimestampMillisAtLeast: $scope.lastCheckForUpdates,
+                myPlayerId:$scope.playerInfo.myPlayerId, 
+                accessSignature:$scope.playerInfo.accessSignature
+              }
+            }
+          ];
+          serverApiService.sendMessage(message, function (response) {
+            $scope.response = angular.toJson(response, true);
+            dateObj = new Date();
+            $scope.lastCheckForUpdates = dateObj.getTime();
+            for(var i = 0; i < response[0].matches.length; i++){
+              console.log("an updated match!!");
+              console.log(response[0].matches[i]);
+              for(var j = 0; j < $scope.myMatches.length; j++){
+                if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
+                  $scope.myMatches[j] = response[0].matches[i];
+                  if(j == $scope.getMatchIndex($scope.matchId)){
+                    $scope.history = $scope.myMatches[j].history;
+                    $scope.updateTheBoard();
+                  }
+                }
+              }
+            }
+            if(response[0].matches.length > 0){
+              $scope.summarizeMyMatches();  
+            }
+          });
+        }
+      }, 10000);
+    }
+
     /*
     * log in initializations
     */
+
     if(featureService.args.gameId === undefined){
-      alert("you must include a game id in the url... ianguerin.github.io/smgplatform/smgplatform.html?gameId=1234");  
+      alert("you must include a game id in the url... ianguerin.github.io/smgplatform/smgplatform.html?gameId=5765867027562496");  
     }else if(window.localStorage.getItem("playerInfo")){
       $scope.loggedIn = true;
       $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
@@ -361,7 +439,6 @@ angular.module('myApp', [])
       document.body.style.display = "block";
       document.getElementById("logging-in-loader").style.display = "block";
     }
-
 
     /*
     * platform interaction
@@ -396,33 +473,7 @@ angular.module('myApp', [])
           });
         }else{ // this executes when you load a game that already has moves on it
           // add last game state to board
-          // maybe put this in its own function, as moving back and forth through history as well as auto refresh will use it
-          var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
-          var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
-          var endScore = $scope.isGameOver();
-          if(endScore.length == 2){
-            $scope.endScore = endScore;
-          }else{
-            $scope.endScore = [];
-          }
-          var stateBefore;
-          // this is the first move on the board
-          if($scope.history.moves.length == 1){
-            stateBefore = {};
-          }else{
-            stateBefore = $scope.history.stateAfterMoves[$scope.history.moves.length - 2];
-          }
-          var stateAfter = $scope.history.stateAfterMoves[$scope.history.moves.length - 1];
-          
-          platformMessageService.sendMessage({
-            isMoveOk: {
-              move: $scope.history.moves[$scope.history.moves.length - 1],
-              stateAfterMove: stateAfter,
-              stateBeforeMove: stateBefore,
-              turnIndexBeforeMove: turnIndexBefore,
-              turnIndexAfterMove: turnIndexAfter
-            }
-          });
+          $scope.updateTheBoard();
         }
       }else if(message.isMoveOkResult !== undefined) { // this executes when an isMoveOkResult message is sent
         var stateAfter = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 1];
@@ -473,7 +524,7 @@ angular.module('myApp', [])
         }else{
           $scope.sendMoveToServer(message.makeMove);
         }
-      }else if(message.emailJavaScriptError !== undefined){
+      }else if(message.emailJavaScriptError !== undefined && $scope.flags.emailJsErrors){
         $scope.sendEmailJsError(message);
       }
     });
@@ -544,7 +595,8 @@ angular.module('myApp', [])
         {
           emailJavaScriptError: 
             {
-              gameDeveloperEmail: $window.gameInfo.gameDeveloperEmail,
+              // gameDeveloperEmail: $window.gameInfo.gameDeveloperEmail,
+              gameDeveloperEmail: "ianguerin@gmail.com",
               emailSubject: "[SMG PLATFORM ERROR] x [" + $window.gameInfo.languageToGameName.en + "] " + $window.location, 
               emailBody: exceptionString
             }

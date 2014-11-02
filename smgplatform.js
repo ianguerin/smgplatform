@@ -20,10 +20,6 @@ angular.module('myApp', [])
 
     var gameUrl;
 
-    // going to use this for emailjserrors
-    // $rootScope.eagle = "eagle";
-    // throw "eagle error";
-
     /*
     * functions that interact with the server
     */
@@ -45,8 +41,9 @@ angular.module('myApp', [])
         ];
         serverApiService.sendMessage(message, function (response) {
           $scope.response = angular.toJson(response, true);
+          $window.lastResponse = response[0];
           gameUrl = response[0].games[0].gameUrl;
-          $scope.gameInfo = response[0].games[0];
+          $window.gameInfo = response[0].games[0];
           $scope.history = null;
           $scope.showGame = false;
           $scope.matchId = null;
@@ -115,6 +112,7 @@ angular.module('myApp', [])
 
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
         $scope.loggedIn = true;
 
         window.localStorage.setItem("playerInfo", angular.toJson(response[0].playerInfo, true));
@@ -141,6 +139,7 @@ angular.module('myApp', [])
       ];
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
         $scope.games = response[0].games;
       });
     };
@@ -164,6 +163,7 @@ angular.module('myApp', [])
       ];
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
         $scope.myMatches = response[0].matches;
         $scope.summarizeMyMatches();
         if(!angular.equals($scope.myMatches, response[0].matches)){
@@ -234,6 +234,7 @@ angular.module('myApp', [])
       ];
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
         // if there is a match that is joinable
         if(response[0].matches.length > 0){
           // setting this boolean to prevent $scope.watch from changing the history
@@ -279,6 +280,7 @@ angular.module('myApp', [])
       ];
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
         $scope.noMatches = true;
         $scope.matchId = response[0].matches[0].matchId;
         $scope.history = response[0].matches[0].history;
@@ -313,6 +315,7 @@ angular.module('myApp', [])
       ];
       serverApiService.sendMessage(message, function (response) {
         $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
         $scope.history = response[0].matches[0].history;
         $scope.getMyMatches();
 
@@ -328,6 +331,15 @@ angular.module('myApp', [])
           }
         });
 
+      });
+    };
+
+    $scope.sendEmailJsError = function(message){
+      message = [message];
+      serverApiService.sendMessage(message, function (response) {
+        $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
+        alert("a notification has been sent to the developer alerting them of the error");
       });
     };
 
@@ -461,9 +473,10 @@ angular.module('myApp', [])
         }else{
           $scope.sendMoveToServer(message.makeMove);
         }
+      }else if(message.emailJavaScriptError !== undefined){
+        $scope.sendEmailJsError(message);
       }
     });
-
     /*
     * helper methods
     */
@@ -523,27 +536,20 @@ angular.module('myApp', [])
     }
 
   })
-  .factory('$exceptionHandler', function ($window, $injector) {
-    return function (exception, cause) {
-      exception.message += ' (caused by "' + cause + '")';
-      $window.alert(exception.message);
-      var scope = $injector.get("$rootScope");
-      // var serverApiService = $injector.get("serverApiService");
-      // console.log(scope);
-      // console.log(serverApiService);
-      //  var message = [
-      //    {
-      //      emailJavaScriptError: {
-      //        gameDeveloperEmail: scope.eagle, 
-      //        emailSubject: "[ERROR] x [SMGPLATFORM] " + scope.eagle, 
-      //        emailBody: "Your game had the following error: <br>" + exception.message
-      //      }
-      //    }
-      //  ];
-      //  serverApiService.sendMessage(message, function (response) {
-      //    $scope.response = angular.toJson(response, true);
-      //    $window.alert(exception.message);
-      //    throw exception;
-      //  });
-    };
-  });
+  .factory('$exceptionHandler', function ($window, $log) {
+  return function (exception, cause) {
+    $log.info("Game had an exception:", exception, cause);
+    var exceptionString = angular.toJson({exception: exception, cause: cause, lastResponse: $window.lastResponse}, true);
+    var message = //EMAIL_JAVASCRIPT_ERROR
+        {
+          emailJavaScriptError: 
+            {
+              gameDeveloperEmail: $window.gameInfo.gameDeveloperEmail,
+              emailSubject: "[SMG PLATFORM ERROR] x [" + $window.gameInfo.languageToGameName.en + "] " + $window.location, 
+              emailBody: exceptionString
+            }
+        };
+    $window.parent.postMessage(message, "*");
+    $window.alert(exceptionString);
+  };
+});

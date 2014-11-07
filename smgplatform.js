@@ -20,6 +20,7 @@ angular.module('myApp', [])
 
     var gameUrl;
     var dateObj;
+    var gotGameReady = false;
 
     /*
     * functions that interact with the server
@@ -87,9 +88,15 @@ angular.module('myApp', [])
         $scope.yourPlayerIndex = yourPlayerIndex;
         
         // this is the operation that finally loads the game into the iframe
-        $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
+        if(!gotGameReady){
+          $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);  
+          document.getElementById("game_iframe").src = $scope.gameUrl;
+        }else{
+          $scope.updateTheBoard();
+        }
+        
         // this is to refresh the iframe
-        document.getElementById("game_iframe").src = $scope.gameUrl;
+        
         $timeout(function(){
           $scope.showGame = true;
         },500);
@@ -171,7 +178,11 @@ angular.module('myApp', [])
         $scope.summarizeMyMatches();
         if(!angular.equals($scope.myMatches, response[0].matches)){
           if($scope.gameUrl){
-            document.getElementById("game_iframe").src = $scope.gameUrl;
+            if(!gotGameReady){
+              document.getElementById("game_iframe").src = $scope.gameUrl;
+            }else{
+              $scope.updateTheBoard();
+            }
           }
         }
       });
@@ -253,8 +264,37 @@ angular.module('myApp', [])
         // this is the operation that finally loads the game into the iframe
         if($scope.gameUrl){
           $scope.showGame = false;
-          $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
-          document.getElementById("game_iframe").src = $scope.gameUrl;
+          if(!gotGameReady){
+            $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);  
+            document.getElementById("game_iframe").src = $scope.gameUrl;
+          }else{
+            if($scope.openingMove){// update ui to get everything ready
+              platformMessageService.sendMessage({
+                updateUI : {
+                  move : [],
+                  turnIndexBeforeMove : 0,
+                  turnIndexAfterMove : 0,
+                  stateBeforeMove : {},
+                  stateAfterMove : {},
+                  yourPlayerIndex : $scope.yourPlayerIndex,
+                  playersInfo : [
+                    {
+                      playerId: $scope.playerInfo.myPlayerId, 
+                      displayName: $scope.playerInfo.displayName, 
+                      avatarImageUrl: $scope.playerInfo.avatarImageUrl
+                    }, 
+                    {
+                      playerId : null
+                    }
+                  ],
+                  endMatchScores: null
+                }
+              });
+            }else{
+              $scope.updateTheBoard();  
+            }
+            
+          }
         }else{
           $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);  
         }
@@ -444,7 +484,6 @@ angular.module('myApp', [])
     * platform interaction
     */
 
-    var gotGameReady = false;
     platformMessageService.addMessageListener(function (message) {
       if(message.gameReady !== undefined){// this executes when the game emits a message that it has been loaded
         gotGameReady = true;

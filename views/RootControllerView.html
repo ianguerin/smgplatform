@@ -1,0 +1,9 @@
+<header class="bar-title">
+  <h1 class="title">Login!</h1>
+</header>
+
+<div class="content">
+  <div ng-include src="'views/userInfo.html'" ng-show="loggedIn"></div>
+  <div ng-show="!loggedIn">automatically logging you in</div>
+  <button ng-click="logOut()" ng-show="loggedIn">Log out?</button>
+</div>

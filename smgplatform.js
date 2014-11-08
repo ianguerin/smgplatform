@@ -1,8 +1,12 @@
 'use strict';
 
-angular.module('myApp', [])
+angular.module('myApp', ['ngRoute', 'viewsControllers'])
   .controller('Ctrl', 
     function ($sce, $scope, $log, $window, $timeout, $interval, $rootScope, serverApiService, platformMessageService, featureService) {
+
+
+    //DEV MODE?
+    $scope.devMode = false;
 
     // lets get some flags and args
     featureService.init();
@@ -21,6 +25,8 @@ angular.module('myApp', [])
     var gameUrl;
     var dateObj;
     var gotGameReady = false;
+    var reloadingMatch = false;
+    var reloadMatchId;
 
     /*
     * functions that interact with the server
@@ -79,6 +85,8 @@ angular.module('myApp', [])
           return;
         }
         $scope.matchId = matchId;
+        $scope.iframeLoaded = false;
+        window.location.hash ="#/match/" + matchId;
         $scope.history = $scope.myMatches[matchIndex].history;
         var yourPlayerIndex = $scope.getYourPlayerIndexForMatchIndex(matchIndex);
 
@@ -131,7 +139,6 @@ angular.module('myApp', [])
         }
         // MUST CALL getGames AGAIN!
         $scope.gameId = featureService.args.gameId;
-        document.getElementById("logging-in-loader").style.display = "none";
       });
     };
 
@@ -176,6 +183,10 @@ angular.module('myApp', [])
         dateObj = new Date();
         $scope.lastCheckForUpdates = dateObj.getTime();
         $scope.summarizeMyMatches();
+        if(reloadingMatch){
+          $scope.matchId = reloadMatchId;  
+          reloadingMatch = false;
+        }
         if(!angular.equals($scope.myMatches, response[0].matches)){
           if($scope.gameUrl){
             if(!gotGameReady){
@@ -256,16 +267,18 @@ angular.module('myApp', [])
           $scope.matchId = response[0].matches[0].matchId;
           $scope.history = response[0].matches[0].history;
           $scope.yourPlayerIndex = 1;
+          window.location.hash ="#/match/" + $scope.matchId;
         }else{ // you are creating a match
           $scope.openingMove = true;
           $scope.yourPlayerIndex = 0;
           $scope.history = null;
+          window.location.hash ="#/match/firstMove";
         }
         // this is the operation that finally loads the game into the iframe
         if($scope.gameUrl){
           $scope.showGame = false;
           if(!gotGameReady){
-            $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);  
+            $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
             document.getElementById("game_iframe").src = $scope.gameUrl;
           }else{
             if($scope.openingMove){// update ui to get everything ready
@@ -301,6 +314,7 @@ angular.module('myApp', [])
         
         $timeout(function(){
           $scope.showGame = true;
+          console.log($scope.showGame);
         }, 500);
       });
     };
@@ -326,6 +340,7 @@ angular.module('myApp', [])
         $window.lastResponse = response[0];
         $scope.noMatches = true;
         $scope.matchId = response[0].matches[0].matchId;
+        window.location.hash ="#/match/" + $scope.matchId;
         $scope.history = response[0].matches[0].history;
 
         // this seems like a LOT of work to find turn index
@@ -423,7 +438,6 @@ angular.module('myApp', [])
     if($scope.flags.autoRefresh){
       $interval(function() {
         if($scope.myMatches !== undefined){
-          console.log("looking after " + $scope.lastCheckForUpdates);
           var message = [ // GET_PLAYER_MATCHES
             {
               getPlayerMatches: {
@@ -471,13 +485,19 @@ angular.module('myApp', [])
       $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
       $scope.gameId = featureService.args.gameId;
       document.body.style.display = "block";
+      if(window.location.hash.indexOf("match/") != -1){
+        var matchId = window.location.hash.substring(window.location.hash.indexOf("match/") + 6);
+        reloadingMatch = true;
+        reloadMatchId = matchId;
+      }else{
+        window.location.hash ="#/choose-match";
+      }
     }else{
       $scope.loggedIn = false;
       // set gameid in the register player as guest call back
       $scope.registerPlayerAsGuest();
       // showing loading gif
       document.body.style.display = "block";
-      document.getElementById("logging-in-loader").style.display = "block";
     }
 
     /*
@@ -567,6 +587,7 @@ angular.module('myApp', [])
         $scope.sendEmailJsError(message);
       }
     });
+
     /*
     * helper methods
     */
@@ -605,7 +626,7 @@ angular.module('myApp', [])
           return i;
         }
       }
-    }
+    };
 
     $scope.isGameOver = function(){
       for(var i = 0; i < $scope.history.moves[$scope.history.moves.length - 1].length; i++){
@@ -614,7 +635,7 @@ angular.module('myApp', [])
         }
       }
       return [];
-    }
+    };
 
     $scope.isGameOverFromMove = function(move){
       for(var i = 0; i < move.length; i++){
@@ -623,7 +644,16 @@ angular.module('myApp', [])
         }
       }
       return [];
-    }
+    };
+
+    $scope.logOut = function(){
+      window.localStorage.removeItem("playerInfo");
+      window.location.reload();
+    };
+
+    $scope.changeActive = function(showGame){
+      $scope.showGame = showGame;
+    };    
 
   })
   .factory('$exceptionHandler', function ($window, $log) {
@@ -643,4 +673,31 @@ angular.module('myApp', [])
     $window.parent.postMessage(message, "*");
     $window.alert(exceptionString);
   };
+})
+.config(function ($routeProvider) {
+  $routeProvider
+    .when('/',
+    {
+      controller: 'RootController',
+      templateUrl: 'views/RootControllerView.html'
+    })
+    .when('/choose-match',
+    {
+      controller: 'ChooseMatchController',
+      templateUrl: 'views/ChooseMatchControllerView.html'
+
+    })
+    .when('/match/:selectedMatchId',
+    {
+      controller: 'MatchController',
+      templateUrl: 'views/MatchControllerView.html'
+
+    })
+    .when('/new-match',
+    {
+      controller: 'NewMatchController',
+      templateUrl: 'views/NewMatchControllerView.html'
+
+    })
+    .otherwise({ redirectTo: '/'});
 });

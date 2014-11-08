@@ -4,42 +4,58 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>GroupProj - v008</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="main.css">
+  <link rel="stylesheet" type="text/css" href="css/ratchet.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.js"></script>
   <script src="smgplatform.js"></script>
+  <script src="viewsControllers.js"></script>
   <script src="http://yoav-zibin.github.io/emulator/serverApiService.js"></script>
   <script src="http://yoav-zibin.github.io/emulator/platformMessageService.js"></script>
   <script src="featureService.js"></script>
 </head>
 <body ng-cloak ng-controller="Ctrl">
-  <div id="logging-in-loader">
-    <img src="images/logging-in-loader.gif"/>
-    <span>logging in</span>
-  </div>
-  <img ng-src="{{playerInfo.avatarImageUrl}}" ng-show="loggedIn"/>
-  <span ng-show="loggedIn">{{playerInfo.displayName}}</span>
-  <br>
-  <button ng-click="registerPlayerAsGuest()">Register Player As Guest</button>
-  <button ng-click="reserveAutoMatch()" ng-show="flags.autoMatch">Reserve Auto Match (or make new)!</button>
-  <br>
-  selected game - {{gameId ? gameId : 'no game selected'}} * matchId - {{matchId ? matchId : 'no match selected'}}
-  <br>
-  <div ng-show="flags.matchMenu">
-    <img ng-src="{{myMatches[getMatchIndex(matchId)].playersInfo[1 - yourPlayerIndex].avatarImageUrl}}"/>
-    {{myMatches[getMatchIndex(matchId)].playersInfo[1 - yourPlayerIndex].displayName}}
-    {{myMatches[getMatchIndex(matchId)].summary.turn}}
-  </div>
-  Server response:<br>
-  <textarea ng-model="response" rows=5 cols=100 readonly></textarea>
-  <br>
-  <select ng-model="matchId" ng-options="match.matchId as match.summary.full for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined">
-    <option value="">Select A Match!</option>
-  </select>
-  <br>
-  {{endScore}} {{yourPlayerIndex}}
-  <br>
-  <iframe frameborder="1" id="game_iframe" ng-src="{{gameUrl}}" scrolling="no" seamless="seamless" ng-show="showGame"></iframe>
   
   <br>
+  <div ng-show="devMode">
+    <br>
+    Server response:<br>
+    <textarea ng-model="response" rows=5 cols=100 readonly></textarea>
+    {{endScore}} {{yourPlayerIndex}}
+    <br>
+  </div>
+  <nav class="bar-tab">
+    <ul class="tab-inner" id="bar-navigation">
+      <li class="tab-item" ng-click="changeActive(false)" id="home-tab">
+        <a href="#/">
+          <img class="tab-icon" src="images/icon-home.png">
+          <div class="tab-label">Home</div>
+        </a>
+      </li>
+      <li class="tab-item" ng-click="changeActive(false)" id="choosematch-tab">
+        <a href="#/choose-match">
+          <img class="tab-icon" src="images/icon-profile.png">
+          <div class="tab-label">Select Match</div>
+        </a>
+      </li>
+      <li class="tab-item" ng-click="changeActive(true)" id="match-tab">
+        <a href="#/match/{{matchId}}">
+          <img class="tab-icon" src="images/icon-messages.png">
+          <div class="tab-label">Play</div>
+        </a>
+      </li>
+      <li class="tab-item" ng-click="changeActive(false)" id="newmatch-tab">
+        <a href="#/new-match/">
+          <img class="tab-icon" src="images/icon-settings.png">
+          <div class="tab-label">New Match</div>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- placeholder for view markup -->
+  <div ng-view></div>
+
+  <iframe frameborder="1" id="game_iframe" ng-src="{{gameUrl}}" scrolling="no" seamless="seamless" ng-show="showGame"></iframe>
+
 </body>
 </html>

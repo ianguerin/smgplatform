@@ -12,9 +12,16 @@ body{
 }
 
 #game_iframe{
-  position: absolute;
+  position: fixed;
   top:44px;
-  height: 88%;
+  /* Firefox */
+  height: -moz-calc(100% - 94px);
+  /* WebKit */
+  height: -webkit-calc(100% - 94px);
+  /* Opera */
+  height: -o-calc(100% - 94px);
+  /* Standard */
+  height: calc(100% - 94px);
   width: 100%;
   overflow: hidden;
 }

@@ -184,8 +184,14 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         $scope.lastCheckForUpdates = dateObj.getTime();
         $scope.summarizeMyMatches();
         if(reloadingMatch){
-          $scope.matchId = reloadMatchId;  
+          var matchIndex = $scope.getMatchIndex(reloadMatchId);
+          if(matchIndex == -1){
+            window.location.hash ="#/";
+          }else{
+            $scope.matchId = reloadMatchId;  
+          }
           reloadingMatch = false;
+
         }
         if(!angular.equals($scope.myMatches, response[0].matches)){
           if($scope.gameUrl){
@@ -314,7 +320,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         
         $timeout(function(){
           $scope.showGame = true;
-          console.log($scope.showGame);
         }, 500);
       });
     };
@@ -404,8 +409,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // update the board with new states, called by autorefresh and on loading a match into the iframe
     $scope.updateTheBoard = function(){
-      console.log("updating the board");
-      console.log($scope.history);
       var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
       var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
       var endScore = $scope.isGameOver();
@@ -454,8 +457,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
             dateObj = new Date();
             $scope.lastCheckForUpdates = dateObj.getTime();
             for(var i = 0; i < response[0].matches.length; i++){
-              console.log("an updated match!!");
-              console.log(response[0].matches[i]);
               for(var j = 0; j < $scope.myMatches.length; j++){
                 if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
                   $scope.myMatches[j] = response[0].matches[i];
@@ -614,6 +615,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           return i;
         }
       }
+      return -1;
     };
 
     $scope.getYourPlayerIndexForMatchIndex = function(matchIndex){

@@ -2,7 +2,7 @@
 <html lang="en" ng-app="myApp">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>GroupProj - v010</title>
+  <title>GroupProj - v011</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="css/ratchet.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
@@ -15,8 +15,6 @@
   <script src="featureService.js"></script>
 </head>
 <body ng-cloak ng-controller="Ctrl">
-  
-  <br>
   <div ng-show="devMode">
     <br>
     Server response:<br>
@@ -34,13 +32,13 @@
       </li>
       <li class="tab-item" ng-click="changeActive(false)" id="choosematch-tab">
         <a href="#/choose-match">
-          <img class="tab-icon" src="images/icon-profile.png">
+          <img class="tab-icon" src="images/icon-settings.png">
           <div class="tab-label">Select Match</div>
         </a>
       </li>
       <li class="tab-item" ng-click="changeActive(true)" id="match-tab">
         <a href="#/match/{{matchId}}">
-          <img class="tab-icon" src="images/icon-messages.png">
+          <img class="tab-icon" src="images/icon-settings.png">
           <div class="tab-label">Play</div>
         </a>
       </li>

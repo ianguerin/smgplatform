@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="651ae1b0-26c3-4600-8139-37361ce11419" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/main.css" afterPath="$PROJECT_DIR$/css/main.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/RootControllerView.html" afterPath="$PROJECT_DIR$/views/RootControllerView.html" />
     </list>
     <ignored path="smgplatform11:16:14.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/views/RootControllerView.html">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.12539186" vertical-offset="0" max-vertical-offset="957">
-              <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+              <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -79,8 +79,8 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/views/userInfo.html" />
-        <option value="$PROJECT_DIR$/views/RootControllerView.html" />
         <option value="$PROJECT_DIR$/css/main.css" />
+        <option value="$PROJECT_DIR$/views/RootControllerView.html" />
       </list>
     </option>
   </component>
@@ -255,7 +255,7 @@
     <entry file="file://$PROJECT_DIR$/views/RootControllerView.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.12539186" vertical-offset="0" max-vertical-offset="957">
-          <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+          <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
           <folding />
         </state>
       </provider>

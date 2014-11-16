@@ -67,17 +67,17 @@ li{
 
 /* adding button class*/
 .round-button {
-    width:25%;
-}
-.round-button-circle {
-    width: 10%;
-    height:0;
-    padding-bottom: 100%;
+    display:block;
+    width:50px;
+    height:50px;
+    line-height:50px;
+    border: 2px solid #f5f5f5;
     border-radius: 50%;
-    border:10px solid #cfdcec;
-    overflow:hidden;
-
-    background: #4679BD;
+    color:#f5f5f5;
+    text-align:center;
+    text-decoration:none;
+    background: #464646;
     box-shadow: 0 0 3px gray;
+    font-size:20px;
+    font-weight:bold;
 }
-

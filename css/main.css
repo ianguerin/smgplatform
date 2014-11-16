@@ -7,10 +7,6 @@ html, body {
   overflow: hidden;
 }
 
-body{
-  display: none;
-}
-
 #game_iframe{
   position: fixed;
   top:44px;
@@ -27,6 +23,5 @@ body{
 }
 
 li{
-  text-decoration: underline;
   cursor: pointer;
 }

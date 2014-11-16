@@ -27,6 +27,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     var gotGameReady = false;
     var reloadingMatch = false;
     var reloadMatchId;
+    var intervalSeconds = 1;
 
     /*
     * functions that interact with the server
@@ -51,6 +52,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           $scope.response = angular.toJson(response, true);
           $window.lastResponse = response[0];
           gameUrl = response[0].games[0].gameUrl;
+          $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
           $window.gameInfo = response[0].games[0];
           $scope.history = null;
           $scope.showGame = false;
@@ -86,7 +88,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         }
         $scope.matchId = matchId;
         $scope.iframeLoaded = false;
-        window.location.hash ="#/match/" + matchId;
+        window.location.hash = "#/match/" + matchId;
         $scope.history = $scope.myMatches[matchIndex].history;
         var yourPlayerIndex = $scope.getYourPlayerIndexForMatchIndex(matchIndex);
 
@@ -97,8 +99,8 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         
         // this is the operation that finally loads the game into the iframe
         if(!gotGameReady){
-          $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);  
-          document.getElementById("game_iframe").src = $scope.gameUrl;
+          // $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);  
+          // document.getElementById("game_iframe").src = $scope.gameUrl;
         }else{
           $scope.updateTheBoard();
         }
@@ -115,7 +117,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     $scope.registerPlayerAsGuest = function () {
       var displayName = "Guest-" + Math.floor(Math.random()*1000);
 
-      var imgUrl = "images/avatar" + Math.floor(Math.random()*10) + ".gif";
+      var imgUrl = "http://ianguerin.github.io/smgplatform/images/avatar" + Math.floor(Math.random()*10) + ".gif";
 
       var message = [ // REGISTER_PLAYER
         {
@@ -141,24 +143,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         $scope.gameId = featureService.args.gameId;
       });
     };
-
-    // ask server for a list of all the games in the server's library
-    $scope.getGames = function(){
-      if(!$scope.loggedIn){
-        return;
-      }
-      var message = [ // GET_GAMES
-        {
-          getGames: {}
-        }
-      ];
-      serverApiService.sendMessage(message, function (response) {
-        $scope.response = angular.toJson(response, true);
-        $window.lastResponse = response[0];
-        $scope.games = response[0].games;
-      });
-    };
-    $scope.getGames();
 
     // if player has selected a game, find a list of their ongoing matches in that game
     $scope.getMyMatches = function(){
@@ -186,7 +170,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         if(reloadingMatch){
           var matchIndex = $scope.getMatchIndex(reloadMatchId);
           if(matchIndex == -1){
-            window.location.hash ="#/";
+            window.location.hash = "#/";
           }else{
             $scope.matchId = reloadMatchId;  
           }
@@ -195,9 +179,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         }
         if(!angular.equals($scope.myMatches, response[0].matches)){
           if($scope.gameUrl){
-            if(!gotGameReady){
-              document.getElementById("game_iframe").src = $scope.gameUrl;
-            }else{
+            if(gotGameReady){
               $scope.updateTheBoard();
             }
           }
@@ -273,20 +255,17 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           $scope.matchId = response[0].matches[0].matchId;
           $scope.history = response[0].matches[0].history;
           $scope.yourPlayerIndex = 1;
-          window.location.hash ="#/match/" + $scope.matchId;
+          window.location.hash = "#/match/" + $scope.matchId;
         }else{ // you are creating a match
           $scope.openingMove = true;
           $scope.yourPlayerIndex = 0;
           $scope.history = null;
-          window.location.hash ="#/match/firstMove";
+          window.location.hash = "#/match/firstMove";
         }
         // this is the operation that finally loads the game into the iframe
         if($scope.gameUrl){
           $scope.showGame = false;
-          if(!gotGameReady){
-            $scope.gameUrl = $sce.trustAsResourceUrl(gameUrl);
-            document.getElementById("game_iframe").src = $scope.gameUrl;
-          }else{
+          if(gotGameReady){
             if($scope.openingMove){// update ui to get everything ready
               platformMessageService.sendMessage({
                 updateUI : {
@@ -326,6 +305,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // creates a new game on the server, making you player one
     $scope.createNewGameOnServer = function(move){
+      $scope.callRefreshTimeout(1);
       var message = [ // NEW_MATCH
         {
           newMatch: {
@@ -345,7 +325,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         $window.lastResponse = response[0];
         $scope.noMatches = true;
         $scope.matchId = response[0].matches[0].matchId;
-        window.location.hash ="#/match/" + $scope.matchId;
+        window.location.hash = "#/match/" + $scope.matchId;
         $scope.history = response[0].matches[0].history;
 
         // this seems like a LOT of work to find turn index
@@ -365,6 +345,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // sends move in a game that already has been created on the server
     $scope.sendMoveToServer = function(move){
+      $scope.callRefreshTimeout(1);
       var message = [ // MADE_MOVE
         {
           madeMove: {
@@ -437,44 +418,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       });
     };
 
-    // auto refresh will look for changes in the matches that you are playing and update your game
-    if($scope.flags.autoRefresh){
-      $interval(function() {
-        if($scope.myMatches !== undefined){
-          var message = [ // GET_PLAYER_MATCHES
-            {
-              getPlayerMatches: {
-                gameId: $scope.gameId, 
-                getCommunityMatches: false,
-                updatedTimestampMillisAtLeast: $scope.lastCheckForUpdates,
-                myPlayerId:$scope.playerInfo.myPlayerId, 
-                accessSignature:$scope.playerInfo.accessSignature
-              }
-            }
-          ];
-          serverApiService.sendMessage(message, function (response) {
-            $scope.response = angular.toJson(response, true);
-            dateObj = new Date();
-            $scope.lastCheckForUpdates = dateObj.getTime();
-            for(var i = 0; i < response[0].matches.length; i++){
-              for(var j = 0; j < $scope.myMatches.length; j++){
-                if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
-                  $scope.myMatches[j] = response[0].matches[i];
-                  if(j == $scope.getMatchIndex($scope.matchId)){
-                    $scope.history = $scope.myMatches[j].history;
-                    $scope.updateTheBoard();
-                  }
-                }
-              }
-            }
-            if(response[0].matches.length > 0){
-              $scope.summarizeMyMatches();  
-            }
-          });
-        }
-      }, 10000);
-    }
-
     /*
     * log in initializations
     */
@@ -491,7 +434,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         reloadingMatch = true;
         reloadMatchId = matchId;
       }else{
-        window.location.hash ="#/choose-match";
+        window.location.hash = "#/choose-match";
       }
     }else{
       $scope.loggedIn = false;
@@ -509,7 +452,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       if(message.gameReady !== undefined){// this executes when the game emits a message that it has been loaded
         gotGameReady = true;
         $scope.gameReadyGame = message.gameReady;
-        if($scope.openingMove){// update ui to get everything ready
+        if($scope.openingMove || $scope.matchId == undefined){// update ui to get everything ready
           platformMessageService.sendMessage({
             updateUI : {
               move : [],
@@ -654,8 +597,63 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     };
 
     $scope.changeActive = function(showGame){
-      $scope.showGame = showGame;
+      $scope.callRefreshTimeout(1);
+      if(($scope.matchId != undefined || window.location.hash.indexOf("firstMove") != -1) && showGame){
+        $scope.showGame = showGame;
+      }else{
+        $scope.showGame = false;
+      }
+      
     };    
+
+    // this is the auto refresh that grows exponentially
+    $scope.callRefreshTimeout = function(newIntervalSeconds){
+      if(newIntervalSeconds != -1){
+        intervalSeconds = newIntervalSeconds;
+      }
+      $timeout(function() {
+        console.log("checking for updates!");
+        if($scope.myMatches !== undefined){
+          var message = [ // GET_PLAYER_MATCHES
+            {
+              getPlayerMatches: {
+                gameId: $scope.gameId, 
+                getCommunityMatches: false,
+                updatedTimestampMillisAtLeast: $scope.lastCheckForUpdates,
+                myPlayerId:$scope.playerInfo.myPlayerId, 
+                accessSignature:$scope.playerInfo.accessSignature
+              }
+            }
+          ];
+          serverApiService.sendMessage(message, function (response) {
+            $scope.response = angular.toJson(response, true);
+            dateObj = new Date();
+            $scope.lastCheckForUpdates = dateObj.getTime();
+            for(var i = 0; i < response[0].matches.length; i++){
+              for(var j = 0; j < $scope.myMatches.length; j++){
+                if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
+                  $scope.myMatches[j] = response[0].matches[i];
+                  if(j == $scope.getMatchIndex($scope.matchId)){
+                    $scope.history = $scope.myMatches[j].history;
+                    $scope.updateTheBoard();
+                  }
+                }
+              }
+            }
+            if(response[0].matches.length > 0){
+              $scope.summarizeMyMatches();  
+            }
+          });
+        }
+        intervalSeconds *= 2;
+        $scope.callRefreshTimeout(-1);
+      }, intervalSeconds * 1000);
+    };
+
+    // auto refresh will look for changes in the matches that you are playing and update your game
+    if($scope.flags.autoRefresh){
+      $scope.callRefreshTimeout(-1);
+    }
 
   })
   .factory('$exceptionHandler', function ($window, $log) {
@@ -701,5 +699,5 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       templateUrl: 'views/NewMatchControllerView.html'
 
     })
-    .otherwise({ redirectTo: '/'});
+    .otherwise({ redirectTo: '/choose-match'});
 });

@@ -2,7 +2,7 @@
 <html lang="en" ng-app="myApp">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>GroupProj - v011</title>
+  <title>SMGPlatform|v012</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="css/ratchet.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
@@ -26,25 +26,25 @@
     <ul class="tab-inner" id="bar-navigation">
       <li class="tab-item" ng-click="changeActive(false)" id="home-tab">
         <a href="#/">
-          <img class="tab-icon" src="images/icon-home.png">
+          <img class="tab-icon" src="images/home.png">
           <div class="tab-label">Home</div>
         </a>
       </li>
       <li class="tab-item" ng-click="changeActive(false)" id="choosematch-tab">
         <a href="#/choose-match">
-          <img class="tab-icon" src="images/icon-settings.png">
+          <img class="tab-icon" src="images/choosematch.png">
           <div class="tab-label">Select Match</div>
         </a>
       </li>
       <li class="tab-item" ng-click="changeActive(true)" id="match-tab">
-        <a href="#/match/{{matchId}}">
-          <img class="tab-icon" src="images/icon-settings.png">
+        <a href="#/match/{{openingMove ? 'firstMove' : matchId}}">
+          <img class="tab-icon" src="images/play.png">
           <div class="tab-label">Play</div>
         </a>
       </li>
       <li class="tab-item" ng-click="changeActive(false)" id="newmatch-tab">
         <a href="#/new-match/">
-          <img class="tab-icon" src="images/icon-settings.png">
+          <img class="tab-icon" src="images/newmatch.png">
           <div class="tab-label">New Match</div>
         </a>
       </li>

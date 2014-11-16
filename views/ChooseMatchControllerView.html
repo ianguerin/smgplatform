@@ -7,7 +7,6 @@
   <select ng-model="$parent.matchId" ng-options="match.matchId as match.summary.full for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined && myMatches.length > 0">
     <option value="">Select a Match!</option>
   </select>
-  <a href="#/new-match/" ng-show="myMatches.length == 0">Start a New Match!</a>
   <br>
   selected game - {{gameId ? gameId : 'no game selected'}} * matchId - {{matchId ? matchId : 'no match selected'}}
   <br>

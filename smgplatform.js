@@ -469,7 +469,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     * log in initializations
     */
 
-    if(featureService.args.gameId === undefined){
+    if(featureService.args.gameId === undefined || featureService.args.gameId == ""){
       alert("you must include a game id in the url... ianguerin.github.io/smgplatform/smgplatform.html?gameId=5765867027562496");  
     }else if(window.localStorage.getItem("playerInfo")){
       $scope.loggedIn = true;

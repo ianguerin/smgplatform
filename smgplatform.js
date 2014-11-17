@@ -86,6 +86,10 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         if(matchIndex == -1){
           return;
         }
+        $scope.flags.passAndPlay = false;
+        $scope.flags.autoMatch = true;
+        $scope.flags.playAgainstComputer = false;
+        $scope.flags.autoRefresh = true;
         $scope.matchId = matchId;
         $scope.iframeLoaded = false;
         window.location.hash = "#/match/" + matchId;
@@ -119,24 +123,36 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     //play against computer
     $scope.playAgainstComputer = function() {
+      $scope.flags.passAndPlay = false;
+      $scope.flags.autoMatch = false;
+      $scope.flags.playAgainstComputer = true;
+      $scope.flags.autoRefresh = false;
       $scope.playMode = "playAgainstTheComputer";
       stateService.setPlayMode($scope.playMode);
+      $scope.matchId = "playComputer";
+      $scope.openingMove = false;
       window.location.hash = "#/match/playComputer";
       $timeout(function(){
         $scope.showGame = true;
       },500);
-    stateService.startNewMatch();
+      stateService.startNewMatch();
     }
 
     //play against friend
     $scope.passAndPlay = function() {
+      $scope.flags.passAndPlay = true;
+      $scope.flags.autoMatch = false;
+      $scope.flags.playAgainstComputer = false;
+      $scope.flags.autoRefresh = false;
       $scope.playMode = "passAndPlay";
       stateService.setPlayMode($scope.playMode);
+      $scope.matchId = "passAndPlay";
+      $scope.openingMove = false;
       window.location.hash = "#/match/passAndPlay";
       $timeout(function(){
         $scope.showGame = true;
       },500);
-    stateService.startNewMatch();
+      stateService.startNewMatch();
     }
 
 
@@ -194,7 +210,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         dateObj = new Date();
         $scope.lastCheckForUpdates = dateObj.getTime();
         $scope.summarizeMyMatches();
-        if(reloadingMatch){
+        if(reloadingMatch){          
           var matchIndex = $scope.getMatchIndex(reloadMatchId);
           if(matchIndex == -1){
             window.location.hash = "#/";
@@ -202,7 +218,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
             $scope.matchId = reloadMatchId;  
           }
           reloadingMatch = false;
-
         }
         if(!angular.equals($scope.myMatches, response[0].matches)){
           if($scope.gameUrl){
@@ -261,6 +276,10 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         return;
       }
 
+      $scope.flags.passAndPlay = false;
+      $scope.flags.autoMatch = true;
+      $scope.flags.playAgainstComputer = false;
+
       var message = [ // RESERVE_AUTO_MATCH
         {
           reserveAutoMatch: {
@@ -288,6 +307,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           $scope.yourPlayerIndex = 0;
           $scope.history = null;
           window.location.hash = "#/match/firstMove";
+          $scope.matchId = "firstMove";
         }
         // this is the operation that finally loads the game into the iframe
         if($scope.gameUrl){
@@ -459,7 +479,22 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       if(window.location.hash.indexOf("match/") != -1){
         var matchId = window.location.hash.substring(window.location.hash.indexOf("match/") + 6);
         reloadingMatch = true;
-        reloadMatchId = matchId;
+        
+        if(window.location.hash.indexOf("playComputer") != -1){
+          $scope.flags.passAndPlay = false;
+          $scope.flags.autoMatch = false;
+          $scope.flags.playAgainstComputer = true;
+          $scope.flags.autoRefresh = false;
+          reloadMatchId = "playComputer";
+        }else if(window.location.hash.indexOf("passAndPlay") != -1){
+          $scope.flags.passAndPlay = true;
+          $scope.flags.autoMatch = false;
+          $scope.flags.playAgainstComputer = false;
+          $scope.flags.autoRefresh = false;
+          reloadMatchId = "passAndPlay";
+        }else{
+          reloadMatchId = matchId;
+        }
       }else{
         window.location.hash = "#/choose-match";
       }
@@ -479,17 +514,17 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       if(message.gameReady !== undefined){// this executes when the game emits a message that it has been loaded
         gotGameReady = true;
         $scope.gameReadyGame = message.gameReady;
-        if($scope.flags.playAgainstComputer || $scope.flags.passAndPlay){
-          var game = message.gameReady;
-          game.isMoveOk = function (params) {
-            platformMessageService.sendMessage({isMoveOk: params});
-            return true;
-          };
-          game.updateUI = function (params) {
-            platformMessageService.sendMessage({updateUI: params});
-          };
-          stateService.setGame(game);
-        }else if($scope.openingMove || $scope.matchId == undefined){// update ui to get everything ready
+        // if($scope.flags.playAgainstComputer || $scope.flags.passAndPlay){
+        var game = message.gameReady;
+        game.isMoveOk = function (params) {
+          platformMessageService.sendMessage({isMoveOk: params});
+          return true;
+        };
+        game.updateUI = function (params) {
+          platformMessageService.sendMessage({updateUI: params});
+        };
+        stateService.setGame(game);
+        if($scope.openingMove || $scope.matchId == undefined){// update ui to get everything ready
           platformMessageService.sendMessage({
             updateUI : {
               move : [],
@@ -645,8 +680,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     $scope.changeActive = function(showGame){
       $scope.callRefreshTimeout(1);
-      console.log(window.location.hash);
-      if(($scope.matchId != undefined || $scope.openingMove) && showGame){
+      if(($scope.matchId != undefined || window.location.hash.indexOf("firstMove") != -1 || window.location.hash.indexOf("playComputer") != -1 || window.location.hash.indexOf("passAndPlay") != -1) && showGame){
         $scope.showGame = showGame;
       }else{
         $scope.showGame = false;
@@ -656,50 +690,49 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // this is the auto refresh that grows exponentially
     $scope.callRefreshTimeout = function(newIntervalSeconds){
-      if($scope.flags.playAgainstComputer === 'false' ||
-          $scope.flags.passAndPlay === 'false'){
-        return;
-      }
-      if(newIntervalSeconds != -1){
-        intervalSeconds = newIntervalSeconds;
-      }
-      $timeout(function() {
-        console.log("checking for updates!");
-        if($scope.myMatches !== undefined){
-          var message = [ // GET_PLAYER_MATCHES
-            {
-              getPlayerMatches: {
-                gameId: $scope.gameId, 
-                getCommunityMatches: false,
-                updatedTimestampMillisAtLeast: $scope.lastCheckForUpdates,
-                myPlayerId:$scope.playerInfo.myPlayerId, 
-                accessSignature:$scope.playerInfo.accessSignature
+      console.log("here");
+      if($scope.flags.autoRefresh){
+        if(newIntervalSeconds != -1){
+          intervalSeconds = newIntervalSeconds;
+        }
+        $timeout(function() {
+          console.log("checking for updates!");
+          if($scope.myMatches !== undefined){
+            var message = [ // GET_PLAYER_MATCHES
+              {
+                getPlayerMatches: {
+                  gameId: $scope.gameId, 
+                  getCommunityMatches: false,
+                  updatedTimestampMillisAtLeast: $scope.lastCheckForUpdates,
+                  myPlayerId:$scope.playerInfo.myPlayerId, 
+                  accessSignature:$scope.playerInfo.accessSignature
+                }
               }
-            }
-          ];
-          serverApiService.sendMessage(message, function (response) {
-            $scope.response = angular.toJson(response, true);
-            dateObj = new Date();
-            $scope.lastCheckForUpdates = dateObj.getTime();
-            for(var i = 0; i < response[0].matches.length; i++){
-              for(var j = 0; j < $scope.myMatches.length; j++){
-                if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
-                  $scope.myMatches[j] = response[0].matches[i];
-                  if(j == $scope.getMatchIndex($scope.matchId)){
-                    $scope.history = $scope.myMatches[j].history;
-                    $scope.updateTheBoard();
+            ];
+            serverApiService.sendMessage(message, function (response) {
+              $scope.response = angular.toJson(response, true);
+              dateObj = new Date();
+              $scope.lastCheckForUpdates = dateObj.getTime();
+              for(var i = 0; i < response[0].matches.length; i++){
+                for(var j = 0; j < $scope.myMatches.length; j++){
+                  if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
+                    $scope.myMatches[j] = response[0].matches[i];
+                    if(j == $scope.getMatchIndex($scope.matchId)){
+                      $scope.history = $scope.myMatches[j].history;
+                      $scope.updateTheBoard();
+                    }
                   }
                 }
               }
-            }
-            if(response[0].matches.length > 0){
-              $scope.summarizeMyMatches();  
-            }
-          });
-        }
-        intervalSeconds *= 2;
-        $scope.callRefreshTimeout(-1);
-      }, intervalSeconds * 1000);
+              if(response[0].matches.length > 0){
+                $scope.summarizeMyMatches();  
+              }
+            });
+          }
+          intervalSeconds *= 2;
+          $scope.callRefreshTimeout(-1);
+        }, intervalSeconds * 1000);
+      }
     };
 
     // auto refresh will look for changes in the matches that you are playing and update your game

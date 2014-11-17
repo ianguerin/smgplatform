@@ -27,25 +27,25 @@
   <nav class="bar-tab">
     <ul class="tab-inner" id="bar-navigation">
       <li class="tab-item" ng-click="changeActive(false)" id="home-tab">
-        <a href="#/">
+        <a href="#/" ng-click="changeActive(false)">
           <img class="tab-icon" src="images/home.png">
           <div class="tab-label">Home</div>
         </a>
       </li>
       <li class="tab-item" ng-click="changeActive(false)" id="choosematch-tab">
-        <a href="#/choose-match">
+        <a href="#/choose-match" ng-click="changeActive(false)">
           <img class="tab-icon" src="images/choosematch.png">
           <div class="tab-label">Select Match</div>
         </a>
       </li>
       <li class="tab-item" ng-click="changeActive(true)" id="match-tab">
-        <a href="#/match/{{openingMove ? 'firstMove' : matchId}}">
+        <a href="#/match/{{openingMove ? 'firstMove' : matchId}}" ng-click="changeActive(true)">
           <img class="tab-icon" src="images/play.png">
           <div class="tab-label">Play</div>
         </a>
       </li>
       <li class="tab-item" ng-click="changeActive(false)" id="newmatch-tab">
-        <a href="#/new-match/">
+        <a href="#/new-match/" ng-click="changeActive(false)">
           <img class="tab-icon" src="images/newmatch.png">
           <div class="tab-label">New Match</div>
         </a>

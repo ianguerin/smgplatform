@@ -25,3 +25,40 @@ html, body {
 li{
   cursor: pointer;
 }
+
+
+
+.button:active {
+    border-top-color: #1b435e;
+    background: #1b435e;
+}
+
+
+
+/* adding button class*/
+.round-button {
+    display:block;
+    width:160px;
+    height:160px;
+    line-height:50px;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color:#f5f5f5;
+    font-size: 20px;
+    text-align:center;
+    text-decoration:none;
+    background: #464646;
+    box-shadow: 0 0 3px gray;
+
+}
+
+#LoginButton{
+    height:100px;
+    width:100px;
+}
+
+/* padding button*/
+
+.padAButton{
+
+}

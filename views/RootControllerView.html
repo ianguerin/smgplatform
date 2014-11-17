@@ -3,7 +3,17 @@
 </header>
 
 <div class="content">
+   <center>
   <div ng-include src="'views/userInfo.html'" ng-show="loggedIn"></div>
+
   <div ng-show="!loggedIn">automatically logging you in</div>
-  <button ng-click="logOut()" ng-show="loggedIn">Log out?</button>
+
+   <div>
+  <button class="round-button" ng-click="logOut()" ng-show="loggedIn">Log out?</button>
+   </div>
+    </center>
+
+
 </div>
+
+

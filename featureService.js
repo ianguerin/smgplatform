@@ -7,7 +7,7 @@ angular.module('myApp')
   this.args = {};
   this.init = function(){  
     //Set all feature flags to on (by default) here
-    featureService.flags = {'autoMatch':true,'emailJsErrors':true,'listMultiplayerMatches':true,'matchMenu':true, 'autoRefresh':true};
+    featureService.flags = {'autoMatch':true,'emailJsErrors':true,'listMultiplayerMatches':true,'matchMenu':true, 'autoRefresh':true, 'playAgainstComputer':true, 'passAndPlay':true};
     
     var platformUrl = $window.location.search;
     var gameUrl = platformUrl.substring(1);
@@ -34,6 +34,12 @@ angular.module('myApp')
     }
     if(featureService.args.off && offstring.search('AUTO_REFRESH')!== -1){
       featureService.flags.autoRefresh = false;
+    }
+    if(featureService.args.off && offstring.search('PLAY_AGAINST_COMPUTER')!== -1){
+      featureService.flags.playAgainstComputer = false;
+    }
+    if(featureService.args.off && offstring.search('PASS_AND_PLAY')!== -1){
+      featureService.flags.playAgainstComputer = false;
     }
   };
 }); 

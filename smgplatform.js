@@ -2,7 +2,7 @@
 
 angular.module('myApp', ['ngRoute', 'viewsControllers'])
   .controller('Ctrl', 
-    function ($sce, $scope, $log, $window, $timeout, $interval, $rootScope, serverApiService, platformMessageService, featureService) {
+    function ($sce, $scope, $log, $window, $timeout, $interval, $rootScope, serverApiService, platformMessageService, featureService, stateService) {
 
 
     //DEV MODE?
@@ -112,6 +112,33 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         },500);
       }
     }, true);
+
+    /*
+     * state service things
+     */
+
+    //play against computer
+    $scope.playAgainstComputer = function() {
+      $scope.playMode = "playAgainstTheComputer";
+      stateService.setPlayMode($scope.playMode);
+      window.location.hash = "#/match/playComputer";
+      $timeout(function(){
+        $scope.showGame = true;
+      },500);
+    stateService.startNewMatch();
+    }
+
+    //play against friend
+    $scope.passAndPlay = function() {
+      $scope.playMode = "passAndPlay";
+      stateService.setPlayMode($scope.playMode);
+      window.location.hash = "#/match/passAndPlay";
+      $timeout(function(){
+        $scope.showGame = true;
+      },500);
+    stateService.startNewMatch();
+    }
+
 
     // get a playerId and accessSignature for player
     $scope.registerPlayerAsGuest = function () {
@@ -452,7 +479,17 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       if(message.gameReady !== undefined){// this executes when the game emits a message that it has been loaded
         gotGameReady = true;
         $scope.gameReadyGame = message.gameReady;
-        if($scope.openingMove || $scope.matchId == undefined){// update ui to get everything ready
+        if($scope.flags.playAgainstComputer || $scope.flags.passAndPlay){
+          var game = message.gameReady;
+          game.isMoveOk = function (params) {
+            platformMessageService.sendMessage({isMoveOk: params});
+            return true;
+          };
+          game.updateUI = function (params) {
+            platformMessageService.sendMessage({updateUI: params});
+          };
+          stateService.setGame(game);
+        }else if($scope.openingMove || $scope.matchId == undefined){// update ui to get everything ready
           platformMessageService.sendMessage({
             updateUI : {
               move : [],
@@ -479,53 +516,63 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           $scope.updateTheBoard();
         }
       }else if(message.isMoveOkResult !== undefined) { // this executes when an isMoveOkResult message is sent
-        var stateAfter = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 1];
-        var stateBefore;
-
-        if($scope.history.moves.length > 1){
-          stateBefore = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 2];  
-        }else{
-          stateBefore = {};
-        }
-        
-        var move = $scope.history.moves[$scope.history.moves.length - 1];
-        var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
-        var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
-
-        // is this necessary?
-        var endScore = $scope.isGameOverFromMove(move);
-        if(!(endScore.length == 2)){
-          endScore = null;
-        }
-
-        platformMessageService.sendMessage({// must update the UI after realizing a move is OK
-          updateUI : {
-            move : move,
-            turnIndexBeforeMove : turnIndexBefore,
-            turnIndexAfterMove : turnIndexAfter,
-            stateBeforeMove : stateBefore,
-            stateAfterMove : stateAfter,
-            yourPlayerIndex : $scope.yourPlayerIndex,
-            playersInfo : [
-              {
-                playerId: $scope.playerInfo.myPlayerId, 
-                displayName: $scope.playerInfo.displayName, 
-                avatarImageUrl: $scope.playerInfo.avatarImageUrl
-              }, 
-              {
-                playerId : null
-              }
-            ],
-            endMatchScores: null
+        if($scope.flags.playAgainstComputer || $scope.flags.passAndPlay){
+          if (message.isMoveOkResult !== true) {
+            $window.alert("isMoveOk returned " + message.isMoveOkResult);
           }
-        });
-      }else if(message.makeMove !== undefined) {
-        //send move to server
-        if($scope.openingMove){
-          $scope.createNewGameOnServer(message.makeMove);
-          $scope.openingMove = false;
         }else{
-          $scope.sendMoveToServer(message.makeMove);
+          var stateAfter = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 1];
+          var stateBefore;
+
+          if($scope.history.moves.length > 1){
+            stateBefore = $scope.history.stateAfterMoves[$scope.history.stateAfterMoves.length - 2];  
+          }else{
+            stateBefore = {};
+          }
+          
+          var move = $scope.history.moves[$scope.history.moves.length - 1];
+          var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
+          var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
+
+          // is this necessary?
+          var endScore = $scope.isGameOverFromMove(move);
+          if(!(endScore.length == 2)){
+            endScore = null;
+          }
+
+          platformMessageService.sendMessage({// must update the UI after realizing a move is OK
+            updateUI : {
+              move : move,
+              turnIndexBeforeMove : turnIndexBefore,
+              turnIndexAfterMove : turnIndexAfter,
+              stateBeforeMove : stateBefore,
+              stateAfterMove : stateAfter,
+              yourPlayerIndex : $scope.yourPlayerIndex,
+              playersInfo : [
+                {
+                  playerId: $scope.playerInfo.myPlayerId, 
+                  displayName: $scope.playerInfo.displayName, 
+                  avatarImageUrl: $scope.playerInfo.avatarImageUrl
+                }, 
+                {
+                  playerId : null
+                }
+              ],
+              endMatchScores: null
+            }
+          });
+        }
+      }else if(message.makeMove !== undefined) {
+        if($scope.flags.playAgainstComputer || $scope.flags.passAndPlay){
+          stateService.makeMove(message.makeMove);
+        }else{
+          //send move to server
+          if($scope.openingMove){
+            $scope.createNewGameOnServer(message.makeMove);
+            $scope.openingMove = false;
+          }else{
+            $scope.sendMoveToServer(message.makeMove);
+          }
         }
       }else if(message.emailJavaScriptError !== undefined && $scope.flags.emailJsErrors){
         $scope.sendEmailJsError(message);
@@ -598,7 +645,8 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     $scope.changeActive = function(showGame){
       $scope.callRefreshTimeout(1);
-      if(($scope.matchId != undefined || window.location.hash.indexOf("firstMove") != -1) && showGame){
+      console.log(window.location.hash);
+      if(($scope.matchId != undefined || $scope.openingMove) && showGame){
         $scope.showGame = showGame;
       }else{
         $scope.showGame = false;
@@ -608,6 +656,10 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // this is the auto refresh that grows exponentially
     $scope.callRefreshTimeout = function(newIntervalSeconds){
+      if($scope.flags.playAgainstComputer === 'false' ||
+          $scope.flags.passAndPlay === 'false'){
+        return;
+      }
       if(newIntervalSeconds != -1){
         intervalSeconds = newIntervalSeconds;
       }
@@ -696,7 +748,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     .when('/new-match',
     {
       controller: 'NewMatchController',
-      templateUrl: 'views/NewMatchControllerView.html'
+      templateUrl: 'views/NewControllerView.html'
 
     })
     .otherwise({ redirectTo: '/choose-match'});

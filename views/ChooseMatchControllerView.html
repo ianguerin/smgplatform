@@ -2,7 +2,7 @@
   <h1 class="title">Select a Match!</h1>
 </header>
 
-<div class="content">
+<div class="content center">
   <div ng-include src="'views/userInfo.html'"></div>
   <select ng-model="$parent.matchId" ng-options="match.matchId as match.summary.full for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined && myMatches.length > 0">
     <option value="">Select a Match!</option>

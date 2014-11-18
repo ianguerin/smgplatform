@@ -749,8 +749,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         {
           emailJavaScriptError: 
             {
-              // gameDeveloperEmail: $window.gameInfo.gameDeveloperEmail,
-              gameDeveloperEmail: "ianguerin@gmail.com",
+              gameDeveloperEmail: $window.gameInfo.gameDeveloperEmail,
               emailSubject: "[SMG PLATFORM ERROR] x [" + $window.gameInfo.languageToGameName.en + "] " + $window.location, 
               emailBody: exceptionString
             }

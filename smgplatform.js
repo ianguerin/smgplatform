@@ -763,24 +763,24 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     .when('/',
     {
       controller: 'RootController',
-      templateUrl: 'views/RootControllerView.html'
+      templateUrl: 'views/HomeLoginControllerView.html'
     })
     .when('/choose-match',
     {
       controller: 'ChooseMatchController',
-      templateUrl: 'views/ChooseMatchControllerView.html'
+      templateUrl: 'views/SelectMatchControllerView.html'
 
     })
     .when('/match/:selectedMatchId',
     {
       controller: 'MatchController',
-      templateUrl: 'views/MatchControllerView.html'
+      templateUrl: 'views/PlayerControllerView.html'
 
     })
     .when('/new-match',
     {
       controller: 'NewMatchController',
-      templateUrl: 'views/NewControllerView.html'
+      templateUrl: 'views/StartNewMatchControllerView.html'
 
     })
     .otherwise({ redirectTo: '/choose-match'});

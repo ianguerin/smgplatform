@@ -71,9 +71,12 @@ li{
  ***********************/
 
 .center {
-    margin: auto;
+    margin-top: 10%;
+    margin-bottom: 20%;
+    margin-left: 10%;
+    margin-right: 10%;
     width: 80%;
-    height: 80%;
+    height: 70%;
     background-image: url("../images/b1.jpg");
 }
 

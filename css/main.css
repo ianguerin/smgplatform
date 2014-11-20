@@ -71,15 +71,16 @@ li{
  ***********************/
 
 .center {
-    margin-top: 10%;
-    margin-bottom: 15%;
+    margin-top: 44px + 10%;
+    margin-bottom: 10%;
     margin-left: 10%;
     margin-right: 10%;
     width: 80%;
-    height: 75%;
+    height: 80% - 44px;
+}
+.view {
     background-image: url("../images/b1.jpg");
 }
-
 body {
   background-image: url("../images/b4.jpeg");
 }

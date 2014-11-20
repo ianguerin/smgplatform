@@ -78,6 +78,8 @@ li{
     height: 76%;
     /*background-image: url("../images/b1.jpg");*/
     background-color:#606060;
+    border: 2px solid #a1a1a1;
+    border-radius: 25px;
 }
 body {
   /*background-image: url("../images/b4.jpeg");*/

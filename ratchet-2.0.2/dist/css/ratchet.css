@@ -456,6 +456,7 @@ p {
   margin: -2px -4px -2px 4px;
   font-size: 12px;
   background-color: rgba(0, 0, 0, .15);
+  width: 50%;
 }
 
 .btn .badge-inverted,

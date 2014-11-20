@@ -1,239 +1,104 @@
-/*!
- * =====================================================
- * Ratchet v2.0.2 (http://goratchet.com)
- * Copyright 2014 Connor Sears
- * Licensed under MIT (https://github.com/twbs/ratchet/blob/master/LICENSE)
- *
- * v2.0.2 designed by @connors.
- * =====================================================
+/**
+ * ==================================
+ * Ratchet v1.0.1
+ * Licensed under The MIT License
+ * http://opensource.org/licenses/MIT
+ * ==================================
  */
 
-/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+/* Hard reset
+-------------------------------------------------- */
+
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+section,
+summary,
+time,
+audio,
+video {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+/* Prevents iOS text size adjust after orientation change, without disabling (Thanks to @necolas) */
 html {
-  font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
 
-body {
-  margin: 0;
-}
-
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-main,
-menu,
-nav,
-section,
-summary {
-  display: block;
-}
-
-audio,
-canvas,
-progress,
-video {
-  display: inline-block;
-  vertical-align: baseline;
-}
-
-audio:not([controls]) {
-  display: none;
-  height: 0;
-}
-
-[hidden],
-template {
-  display: none;
-}
-
-a {
-  background-color: transparent;
-}
-
-a:active,
-a:hover {
-  outline: 0;
-}
-
-abbr[title] {
-  border-bottom: 1px dotted;
-}
-
-b,
-strong {
-  font-weight: bold;
-}
-
-dfn {
-  font-style: italic;
-}
-
-h1 {
-  margin: .67em 0;
-  font-size: 2em;
-}
-
-mark {
-  color: #000;
-  background: #ff0;
-}
-
-small {
-  font-size: 80%;
-}
-
-sub,
-sup {
-  position: relative;
-  font-size: 75%;
-  line-height: 0;
-  vertical-align: baseline;
-}
-
-sup {
-  top: -.5em;
-}
-
-sub {
-  bottom: -.25em;
-}
-
-img {
-  border: 0;
-}
-
-svg:not(:root) {
-  overflow: hidden;
-}
-
-figure {
-  margin: 1em 40px;
-}
-
-hr {
-  height: 0;
-  -moz-box-sizing: content-box;
-       box-sizing: content-box;
-}
-
-pre {
-  overflow: auto;
-}
-
-code,
-kbd,
-pre,
-samp {
-  font-family: monospace, monospace;
-  font-size: 1em;
-}
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  margin: 0;
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  overflow: visible;
-}
-
-button,
-select {
-  text-transform: none;
-}
-
-button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-  -webkit-appearance: button;
-  cursor: pointer;
-}
-
-button[disabled],
-html input[disabled] {
-  cursor: default;
-}
-
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-  padding: 0;
-  border: 0;
-}
-
-input {
-  line-height: normal;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-  box-sizing: border-box;
-  padding: 0;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  height: auto;
-}
-
-input[type="search"] {
-  -webkit-box-sizing: content-box;
-     -moz-box-sizing: content-box;
-          box-sizing: content-box;
-  -webkit-appearance: textfield;
-}
-
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-
-fieldset {
-  padding: .35em .625em .75em;
-  margin: 0 2px;
-  border: 1px solid #c0c0c0;
-}
-
-legend {
-  padding: 0;
-  border: 0;
-}
-
-textarea {
-  overflow: auto;
-}
-
-optgroup {
-  font-weight: bold;
-}
-
-table {
-  border-spacing: 0;
-  border-collapse: collapse;
-}
-
-td,
-th {
-  padding: 0;
-}
-
-* {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-}
+/* Base styles
+-------------------------------------------------- */
 
 body {
   position: fixed;
@@ -241,603 +106,520 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 17px;
-  line-height: 21px;
-  color: #000;
+  font: 14px/1.25 "Helvetica Neue", sans-serif;
+  color: #222;
   background-color: #fff;
 }
 
+/* Universal link styling */
 a {
-  color: #428bca;
+  color: #0882f0;
   text-decoration: none;
-
-  -webkit-tap-highlight-color: transparent;
-}
-a:active {
-  color: #3071a9;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* Removes the dark touch outlines on links */
 }
 
+/* Wrapper to be used around all content not in .bar-title and .bar-tab */
 .content {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   overflow: auto;
+  background-color: #fff;
+  -webkit-transition-property: top, bottom;
+          transition-property: top, bottom;
+  -webkit-transition-duration: .2s, .2s;
+          transition-duration: .2s, .2s;
+  -webkit-transition-timing-function: linear, linear;
+          transition-timing-function: linear, linear;
   -webkit-overflow-scrolling: touch;
-  background-color: #fff;
 }
 
+/* Hack to force all relatively and absolutely positioned elements still render while scrolling
+   Note: This is a bug for "-webkit-overflow-scrolling: touch" */
 .content > * {
-  -webkit-transform: translateZ(0);
-      -ms-transform: translateZ(0);
-          transform: translateZ(0);
+  -webkit-transform: translateZ(0px);
+          transform: translateZ(0px);
 }
 
-.bar-nav ~ .content {
-  padding-top: 44px;
-}
-
-.bar-header-secondary ~ .content {
-  padding-top: 88px;
-}
-
-.bar-footer ~ .content {
-  padding-bottom: 44px;
-}
-
-.bar-footer-secondary ~ .content {
-  padding-bottom: 88px;
-}
-
-.bar-tab ~ .content {
-  padding-bottom: 50px;
-}
-
-.bar-footer-secondary-tab ~ .content {
-  padding-bottom: 94px;
-}
-
+/* Utility wrapper to pad in components like forms, block buttons and segmented-controllers so they're not full-bleed */
 .content-padded {
-  margin: 10px;
+  padding: 10px;
 }
 
-.text-center {
-  text-align: center;
+/* Pad top/bottom of content so it doesn't hide behind .bar-title and .bar-tab.
+   Note: For these to work, content must come after both bars in the markup */
+.bar-title ~ .content {
+  top: 44px;
 }
+.bar-tab ~ .content {
+  bottom: 51px;
+}
+.bar-header-secondary ~ .content {
+  top: 88px;
+}/* General bar styles
+-------------------------------------------------- */
 
-.pull-left {
-  float: left;
-}
-
-.pull-right {
-  float: right;
-}
-
-.clearfix:before, .clearfix:after {
-  display: table;
-  content: " ";
-}
-.clearfix:after {
-  clear: both;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  line-height: 1;
-}
-
-h1, .h1 {
-  font-size: 36px;
-}
-
-h2, .h2 {
-  font-size: 30px;
-}
-
-h3, .h3 {
-  font-size: 24px;
-}
-
-h4, .h4 {
-  font-size: 18px;
-}
-
-h5, .h5 {
-  margin-top: 20px;
-  font-size: 14px;
-}
-
-h6, .h6 {
-  margin-top: 20px;
-  font-size: 12px;
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: #777;
-}
-
-.btn {
-  position: relative;
-  display: inline-block;
-  padding: 6px 8px 7px;
-  margin-bottom: 0;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1;
-  color: #333;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: top;
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-.btn:active, .btn.active {
-  color: inherit;
-  background-color: #ccc;
-}
-.btn:disabled, .btn.disabled {
-  opacity: .6;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #428bca;
-  border: 1px solid #428bca;
-}
-.btn-primary:active, .btn-primary.active {
-  color: #fff;
-  background-color: #3071a9;
-  border: 1px solid #3071a9;
-}
-
-.btn-positive {
-  color: #fff;
-  background-color: #5cb85c;
-  border: 1px solid #5cb85c;
-}
-.btn-positive:active, .btn-positive.active {
-  color: #fff;
-  background-color: #449d44;
-  border: 1px solid #449d44;
-}
-
-.btn-negative {
-  color: #fff;
-  background-color: #d9534f;
-  border: 1px solid #d9534f;
-}
-.btn-negative:active, .btn-negative.active {
-  color: #fff;
-  background-color: #c9302c;
-  border: 1px solid #c9302c;
-}
-
-.btn-outlined {
-  background-color: transparent;
-}
-.btn-outlined.btn-primary {
-  color: #428bca;
-}
-.btn-outlined.btn-positive {
-  color: #5cb85c;
-}
-.btn-outlined.btn-negative {
-  color: #d9534f;
-}
-.btn-outlined.btn-primary:active, .btn-outlined.btn-positive:active, .btn-outlined.btn-negative:active {
-  color: #fff;
-}
-
-.btn-link {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  color: #428bca;
-  background-color: transparent;
-  border: 0;
-}
-.btn-link:active, .btn-link.active {
-  color: #3071a9;
-  background-color: transparent;
-}
-
-.btn-block {
-  display: block;
-  width: 100%;
-  padding: 15px 0;
-  margin-bottom: 10px;
-  font-size: 18px;
-}
-
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
-  width: 100%;
-}
-
-.btn .badge {
-  margin: -2px -4px -2px 4px;
-  font-size: 12px;
-  background-color: rgba(0, 0, 0, .15);
-}
-
-.btn .badge-inverted,
-.btn:active .badge-inverted {
-  background-color: transparent;
-}
-
-.btn-primary:active .badge-inverted,
-.btn-positive:active .badge-inverted,
-.btn-negative:active .badge-inverted {
-  color: #fff;
-}
-
-.btn-block .badge {
-  position: absolute;
-  right: 0;
-  margin-right: 10px;
-}
-
-.btn .icon {
-  font-size: inherit;
-}
-
-.bar {
+[class*="bar-"] {
   position: fixed;
   right: 0;
   left: 0;
   z-index: 10;
   height: 44px;
-  padding-right: 10px;
-  padding-left: 10px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
+/* Modifier class to dock any bar below .bar-title */
 .bar-header-secondary {
-  top: 44px;
+  top: 45px;
 }
 
+/* Modifier class to dock any bar to bottom of viewport */
 .bar-footer {
   bottom: 0;
 }
 
-.bar-footer-secondary {
-  bottom: 44px;
+/* Generic bar for wrapping buttons, segmented controllers, etc. */
+.bar-standard {
+  background-color: #f2f2f2;
+  background-image: -webkit-linear-gradient(top, #f2f2f2 0, #e5e5e5 100%);
+  background-image: linear-gradient(to bottom, #f2f2f2 0, #e5e5e5 100%);
+  border-bottom: 1px solid #aaa;
+  box-shadow: inset 0 1px 1px -1px #fff;
 }
 
-.bar-footer-secondary-tab {
-  bottom: 50px;
+/* Flip border position to top for footer bars */
+.bar-footer.bar-standard,
+.bar-footer-secondary.bar-standard {
+  border-top: 1px solid #aaa;
+  border-bottom-width: 0;
 }
 
-.bar-footer,
-.bar-footer-secondary,
-.bar-footer-secondary-tab {
-  border-top: 1px solid #ddd;
-  border-bottom: 0;
-}
+/* Title bar
+-------------------------------------------------- */
 
-.bar-nav {
+/* Bar docked to top of viewport for showing page title and actions */
+.bar-title {
   top: 0;
+  display: -webkit-box;
+  display: box;
+  background-color: #dde89a;
+  background-image: -webkit-linear-gradient(top, #1eb0e9 0, #109adc 100%);
+  background-image: linear-gradient(to bottom, #1eb0e9 0, #109adc 100%);
+  border-bottom: 1px solid #0e5895;
+  box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .8);
+  -webkit-box-orient: horizontal;
+          box-orient: horizontal;
 }
 
-.title {
+/* Centered text in the .bar-title */
+.bar-title .title {
   position: absolute;
+  top: 0;
+  left: 0;
   display: block;
   width: 100%;
-  padding: 0;
-  margin: 0 -10px;
-  font-size: 17px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: bold;
   line-height: 44px;
-  color: #000;
+  color: #fff;
   text-align: center;
+  text-shadow: 0 -1px rgba(0, 0, 0, .5);
   white-space: nowrap;
 }
 
-.title a {
+.bar-title > a:not([class*="button"]) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Retain specified title color */
+.bar-title .title a {
   color: inherit;
 }
 
+/* Tab bar
+-------------------------------------------------- */
+
+/* Bar docked to bottom used for primary app navigation */
 .bar-tab {
   bottom: 0;
-  display: table;
-  width: 100%;
   height: 50px;
   padding: 0;
-  table-layout: fixed;
-  border-top: 1px solid #ddd;
-  border-bottom: 0;
+  background-color: #393939;
+  background-image: -webkit-linear-gradient(top, #393939 0, #2b2b2b 100%);
+  background-image: linear-gradient(to bottom, #393939 0, #2b2b2b 100%);
+  border-top: 1px solid #000;
+  border-bottom-width: 0;
+  box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .6);
 }
-.bar-tab .tab-item {
-  display: table-cell;
-  width: 1%;
-  height: 50px;
-  color: #929292;
+
+/* Wrapper for individual tab */
+.tab-inner {
+  display: -webkit-box;
+  display: box;
+  height: 100%;
+  list-style: none;
+  -webkit-box-orient: horizontal;
+          box-orient: horizontal;
+}
+
+/* Navigational tab */
+.tab-item {
+  height: 100%;
+  padding-top: 9px;
   text-align: center;
-  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-flex: 1;
+          box-flex: 1;
 }
-.bar-tab .tab-item.active, .bar-tab .tab-item:active {
-  color: #428bca;
+
+/* Active state for tab */
+.tab-item.active {
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, .5);
 }
-.bar-tab .tab-item .icon {
-  top: 3px;
-  width: 24px;
-  height: 24px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.bar-tab .tab-item .icon ~ .tab-label {
+
+/* Icon for tab  */
+.tab-icon {
   display: block;
-  font-size: 11px;
-}
-
-.bar .btn {
-  position: relative;
-  top: 7px;
-  z-index: 20;
-  padding: 6px 12px 7px;
-  margin-top: 0;
-  font-weight: 400;
-}
-.bar .btn.pull-right {
-  margin-left: 10px;
-}
-.bar .btn.pull-left {
-  margin-right: 10px;
-}
-
-.bar .btn-link {
-  top: 0;
-  padding: 0;
-  font-size: 16px;
-  line-height: 44px;
-  color: #428bca;
-  border: 0;
-}
-.bar .btn-link:active, .bar .btn-link.active {
-  color: #3071a9;
-}
-
-.bar .btn-block {
-  top: 6px;
-  padding: 7px 0;
-  margin-bottom: 0;
-  font-size: 16px;
-}
-
-.bar .btn-nav.pull-left {
-  margin-left: -5px;
-}
-.bar .btn-nav.pull-left .icon-left-nav {
-  margin-right: -3px;
-}
-.bar .btn-nav.pull-right {
-  margin-right: -5px;
-}
-.bar .btn-nav.pull-right .icon-right-nav {
-  margin-left: -3px;
-}
-
-.bar .icon {
-  position: relative;
-  z-index: 20;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-size: 24px;
-}
-.bar .btn .icon {
-  top: 3px;
-  padding: 0;
-}
-.bar .title .icon {
-  padding: 0;
-}
-.bar .title .icon.icon-caret {
-  top: 4px;
-  margin-left: -5px;
-}
-
-.bar input[type="search"] {
-  height: 29px;
-  margin: 6px 0;
-}
-
-.bar .segmented-control {
-  top: 7px;
+  height: 18px;
   margin: 0 auto;
 }
 
-.badge {
-  display: inline-block;
-  padding: 2px 9px 3px;
+/* Label for tab */
+.tab-label {
+  margin-top: 1px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1px rgba(0, 0, 0, .3);
+}
+
+/* Buttons in title bars
+-------------------------------------------------- */
+
+/* Generic style for all buttons in .bar-title */
+.bar-title [class*="button"] {
+  position: relative;
+  z-index: 10; /* Places buttons over full width title */
   font-size: 12px;
-  line-height: 1;
-  color: #333;
-  background-color: rgba(0, 0, 0, .15);
-  border-radius: 100px;
-}
-.badge.badge-inverted {
-  padding: 0 5px 0 0;
-  background-color: transparent;
-}
-
-.badge-primary {
+  line-height: 23px;
   color: #fff;
-  background-color: #428bca;
-}
-.badge-primary.badge-inverted {
-  color: #428bca;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+  background-color: #1eb0e9;
+  background-image: -webkit-linear-gradient(top, #1eb0e9 0, #0984c6 100%);
+  background-image: linear-gradient(to bottom, #1eb0e9 0, #0984c6 100%);
+  border: 1px solid #0e5895;
+  box-shadow: 0 1px rgba(255, 255, 255, .25);
+  -webkit-box-flex: 0;
+          box-flex: 0;
 }
 
-.badge-positive {
+
+/* Hacky way to right align buttons outside of flex-box system
+   Note: is only absolutely positioned button, would be better if flex-box had an "align right" option */
+.bar-title .title + [class*="button"]:last-child,
+.bar-title .button + [class*="button"]:last-child,
+.bar-title [class*="button"].pull-right {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+/* Override standard button active states */
+.bar-title .button:active {
   color: #fff;
-  background-color: #5cb85c;
-}
-.badge-positive.badge-inverted {
-  color: #5cb85c;
+  background-color: #0876b1;
 }
 
-.badge-negative {
+/* Directional buttons in title bars (thanks to @GregorAdams for solution - http://cssnerd.com/2011/11/30/the-best-pure-css3-ios-style-arrow-back-button/)
+-------------------------------------------------- */
+
+/* Add relative positioning so :before content is positioned properly */
+.bar-title .button-prev,
+.bar-title .button-next {
+  position: relative;
+}
+
+/* Prev/next button base styles */
+.bar-title .button-prev {
+  margin-left: 7px; /* Push over to make room for :before content */
+  border-left: 0;
+  border-bottom-left-radius: 10px 15px;
+  border-top-left-radius: 10px 15px;
+}
+.bar-title .button-next {
+  margin-right: 7px; /* Push over to make room for :before content */
+  border-right: 0;
+  border-top-right-radius: 10px 15px;
+  border-bottom-right-radius: 10px 15px;
+}
+
+/* Pointed part of directional button */
+.bar-title .button-prev:before,
+.bar-title .button-next:before {
+  position: absolute;
+  top: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 30px 100px 2px 40px / 2px 40px 30px 100px;
+  content: '';
+  box-shadow: inset 1px 0 #0e5895, inset 0 1px #0e5895;
+  -webkit-mask-image: -webkit-gradient(linear, left top, right bottom, from(#000), color-stop(.33, #000), color-stop(.5, transparent), to(transparent));
+                  mask-image: gradient(linear, left top, right bottom, from(#000), color-stop(.33, #000), color-stop(.5, transparent), to(transparent));
+}
+.bar-title .button-prev:before {
+  left: -5px;
+  background-image: -webkit-gradient(linear, left bottom, right top, from(#0984c6), to(#1eb0e9));
+  background-image: gradient(linear, left bottom, right top, from(#0984c6), to(#1eb0e9));
+  border-left: 1.5px solid rgba(255, 255, 255, .25);
+  -webkit-transform: rotate(-45deg) skew(-10deg, -10deg);
+          transform: rotate(-45deg) skew(-10deg, -10deg);
+}
+.bar-title .button-next:before {
+  right: -5px;
+  background-image: -webkit-gradient(linear, left bottom, right top, from(#1eb0e9), to(#0984c6));
+  background-image: gradient(linear, left bottom, right top, from(#1eb0e9), to(#0984c6));
+  border-top: 1.5px solid rgba(255, 255, 255, .25);
+  -webkit-transform: rotate(135deg) skew(-10deg, -10deg);
+          transform: rotate(135deg) skew(-10deg, -10deg);
+}
+
+/* Active states for the directional buttons */
+.bar-title .button-prev:active,
+.bar-title .button-next:active,
+.bar-title .button-prev:active:before,
+.bar-title .button-next:active:before {
   color: #fff;
-  background-color: #d9534f;
+  background-color: #0876b1;
+  background-image: none;
 }
-.badge-negative.badge-inverted {
-  color: #d9534f;
+.bar-title .button-prev:active:before,
+.bar-title .button-next:active:before {
+  content: '';
+}
+.bar-title .button-prev:active:before {
+  box-shadow: inset 0 3px 3px rgba(0, 0, 0, .2);
+}
+.bar-title .button-next:active:before {
+  box-shadow: inset 0 -3px 3px rgba(0, 0, 0, .2);
 }
 
-.card {
-  margin: 10px;
-  overflow: hidden;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
+/* Block buttons in any bar
+-------------------------------------------------- */
 
-.card .table-view {
+/* Add proper padding and replace buttons normal dropshadow with a shine from bar */
+[class*="bar"] .button-block {
+  padding: 7px 0;
   margin-bottom: 0;
-  border-top: 0;
-  border-bottom: 0;
-}
-.card .table-view .table-view-divider:first-child {
-  top: 0;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-}
-.card .table-view .table-view-divider:last-child {
-  border-bottom-right-radius: 6px;
-  border-bottom-left-radius: 6px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4), 0 1px rgba(255, 255, 255, .8);
 }
 
-.card .table-view-cell:last-child {
-  border-bottom: 0;
+/* Override standard padding changes for .button-blocks */
+[class*="bar"] .button-block:active {
+  padding: 7px 0;
 }
 
-.table-view {
-  padding-left: 0;
-  margin-top: 0;
-  margin-bottom: 15px;
+/* Segmented controller in any bar
+-------------------------------------------------- */
+
+/* Remove standard segmented bottom margin */
+[class*="bar-"] .segmented-controller {
+  margin-bottom: 0;
+}
+
+/* Add margins between segmented controllers and buttons */
+[class*="bar-"] .segmented-controller + [class*="button"],
+[class*="bar-"] [class*="button"] + .segmented-controller {
+  margin-left: 5px;
+}
+
+/* Segmented controller in a title bar
+-------------------------------------------------- */
+
+.bar-title .segmented-controller {
+  line-height: 18px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  background-color: #1eb0e9;
+  background-image: -webkit-linear-gradient(top, #1eb0e9 0, #0984c6 100%);
+  background-image: linear-gradient(to bottom, #1eb0e9 0, #0984c6 100%);
+  border: 1px solid #0e5895;
+  border-radius: 3px;
+  box-shadow: 0 1px rgba(255, 255, 255, .25);
+  -webkit-box-flex: 1;
+          box-flex: 1;
+}
+
+/* Set color for tab border and highlight */
+.bar-title .segmented-controller li {
+  border-left: 1px solid #0e5895;
+  box-shadow: inset 1px 0 rgba(255, 255, 255, .25);
+}
+
+/* Remove inset shadow from first tab or one to the right of the active tab  */
+.bar-title .segmented-controller .active + li,
+.bar-title .segmented-controller li:first-child {
+  box-shadow: none;
+}
+
+/* Remove left-hand border from first tab */
+.bar-title .segmented-controller li:first-child {
+  border-left-width: 0;
+}
+
+/* Depressed state (active) */
+.bar-title .segmented-controller li.active {
+  background-color: #0082c4;
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, .3);
+}
+
+/* Set color of links to white */
+.bar-title .segmented-controller li > a {
+  color: #fff;
+}
+
+
+/* Search forms in standard bar
+-------------------------------------------------- */
+
+/* Position/size search bar within the bar */
+.bar-standard input[type=search] {
+  height: 32px;
+  margin: 0;
+}/* Lists
+-------------------------------------------------- */
+
+/* Remove usual bullet styles from list */
+.list {
+  margin-bottom: 10px;
   list-style: none;
   background-color: #fff;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
 }
 
-.table-view-cell {
+/* Pad each list item and add dividers */
+.list li {
   position: relative;
-  padding: 11px 65px 11px 15px;
-  overflow: hidden;
-  border-bottom: 1px solid #ddd;
+  padding: 20px 60px 20px 10px; /* Given extra right padding to accomodate counts, chevrons or buttons */
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
 }
-.table-view-cell:last-child {
-  border-bottom: 0;
+
+/* Give top border to first list items */
+.list li:first-child {
+  border-top: 1px solid rgba(0, 0, 0, .1);
 }
-.table-view-cell > a:not(.btn) {
+
+/* If a list of links, make sure the child <a> takes up full list item tap area (want to avoid selecting child buttons though) */
+.list li > a:not([class*="button"]) {
   position: relative;
   display: block;
   padding: inherit;
-  margin: -11px -65px -11px -15px;
-  overflow: hidden;
+  margin: -20px -60px -20px -10px;
   color: inherit;
 }
-.table-view-cell > a:not(.btn):active {
-  background-color: #eee;
-}
-.table-view-cell p {
-  margin-bottom: 0;
+
+/* Inset list
+-------------------------------------------------- */
+
+.list.inset {
+  width: auto;
+  margin-right: 10px;
+  margin-left: 10px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 
-.table-view-divider {
+/* Remove border from first/last standard list items to avoid double border at top/bottom of lists */
+.list.inset li:first-child {
+  border-top-width: 0;
+}
+.list.inset li:last-child {
+  border-bottom-width: 0;
+}
+
+
+/* List dividers
+-------------------------------------------------- */
+
+.list .list-divider {
+  position: relative;
+  top: -1px;
   padding-top: 6px;
   padding-bottom: 6px;
-  padding-left: 15px;
-  margin-top: -1px;
-  margin-left: 0;
-  font-weight: 500;
-  color: #999;
-  background-color: #fafafa;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 18px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+  background-color: #f8f8f8;
+  background-image: -webkit-linear-gradient(top, #f8f8f8 0, #eee 100%);
+  background-image: linear-gradient(to bottom, #f8f8f8 0, #eee 100%);
+  border-top: 1px solid rgba(0, 0, 0, .1);
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4);
 }
 
-.table-view .media,
-.table-view .media-body {
-  overflow: hidden;
+/* Rounding first divider on inset lists and remove border on the top */
+.list.inset .list-divider:first-child {
+  top: 0;
+  border-top-width: 0;
+  border-radius: 6px 6px 0 0;
 }
 
-.table-view .media-object.pull-left {
-  margin-right: 10px;
-}
-.table-view .media-object.pull-right {
-  margin-left: 10px;
+/* Rounding last divider on inset lists */
+.list.inset .list-divider:last-child {
+  border-radius: 0 0 6px 6px;
 }
 
-.table-view-cell > .btn,
-.table-view-cell > .badge,
-.table-view-cell > .toggle,
-.table-view-cell > a > .btn,
-.table-view-cell > a > .badge,
-.table-view-cell > a > .toggle {
+/* Right-aligned subcontent in lists (chevrons, buttons, counts and toggles)
+-------------------------------------------------- */
+.list .chevron,
+.list [class*="button"],
+.list [class*="count"],
+.list .toggle {
   position: absolute;
   top: 50%;
-  right: 15px;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.table-view-cell .navigate-left > .btn,
-.table-view-cell .navigate-left > .badge,
-.table-view-cell .navigate-left > .toggle,
-.table-view-cell .navigate-right > .btn,
-.table-view-cell .navigate-right > .badge,
-.table-view-cell .navigate-right > .toggle,
-.table-view-cell .push-left > .btn,
-.table-view-cell .push-left > .badge,
-.table-view-cell .push-left > .toggle,
-.table-view-cell .push-right > .btn,
-.table-view-cell .push-right > .badge,
-.table-view-cell .push-right > .toggle,
-.table-view-cell > a .navigate-left > .btn,
-.table-view-cell > a .navigate-left > .badge,
-.table-view-cell > a .navigate-left > .toggle,
-.table-view-cell > a .navigate-right > .btn,
-.table-view-cell > a .navigate-right > .badge,
-.table-view-cell > a .navigate-right > .toggle,
-.table-view-cell > a .push-left > .btn,
-.table-view-cell > a .push-left > .badge,
-.table-view-cell > a .push-left > .toggle,
-.table-view-cell > a .push-right > .btn,
-.table-view-cell > a .push-right > .badge,
-.table-view-cell > a .push-right > .toggle {
-  right: 35px;
+  right: 10px;
 }
 
-.content > .table-view:first-child {
-  margin-top: 15px;
+ /* Position chevrons/counts vertically centered on the right in list items */
+.list .chevron,
+.list [class*="count"] {
+  margin-top: -10px; /* Half height of chevron */
 }
 
+/* Push count over if there's a sibling chevron */
+.list .chevron + [class*="count"] {
+  right: 30px;
+}
+
+/* Position buttons vertically centered on the right in list items */
+.list [class*="button"] {
+  left: auto;
+  margin-top: -14px; /* Half height of button */
+}
+
+.list .toggle {
+  margin-top: -15px; /* Half height of toggle */
+}/* Forms
+-------------------------------------------------- */
+
+/* Force form elements to inherit font styles */
 input,
 textarea,
 button,
 select {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 17px;
+  font-family: inherit;
+  font-size: inherit;
 }
 
+/* Stretch inputs/textareas to full width and add height to maintain a consistent baseline */
 select,
 textarea,
 input[type="text"],
-input[type="search"],
+input[type=search],
 input[type="password"],
 input[type="datetime"],
 input[type="datetime-local"],
@@ -849,166 +631,354 @@ input[type="number"],
 input[type="email"],
 input[type="url"],
 input[type="tel"],
-input[type="color"] {
+input[type="color"],
+.input-group {
   width: 100%;
-  height: 35px;
-  -webkit-appearance: none;
-  padding: 0 15px;
-  margin-bottom: 15px;
-  line-height: 21px;
+  height: 40px;
+  padding: 10px;
+  margin-bottom: 10px;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(255, 255, 255, .2), inset 0 1px 1px rgba(0, 0, 0, .1);
+  -webkit-appearance: none;
+  box-sizing: border-box;
   outline: none;
 }
 
-input[type="search"] {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 0 10px;
-  font-size: 16px;
-  border-radius: 20px;
+/* Fully round search input */
+input[type=search] {
+  height: 34px;
+  font-size: 14px;
+  border-radius: 30px;
 }
 
-input[type="search"]:focus {
-  text-align: left;
-}
-
+/* Allow text area's height to grow larger than a normal input */
 textarea {
   height: auto;
 }
 
+/* Style select button to look like part of the Ratchet's style */
 select {
   height: auto;
   font-size: 14px;
   background-color: #f8f8f8;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+  background-image: -webkit-linear-gradient(top, #f8f8f8 0%, #d4d4d4 100%);
+  background-image: linear-gradient(to bottom, #f8f8f8 0%, #d4d4d4 100%);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
 }
 
+
+/* Input groups (cluster multiple inputs together into a single group)
+-------------------------------------------------- */
+
+/* Reset from initial form setup styles */
 .input-group {
-  background-color: #fff;
+  width: auto;
+  height: auto;
+  padding: 0;
 }
 
-.input-group input,
-.input-group textarea {
+/* Remove spacing, borders, shadows and rounding since it all belongs on the .input-group not the input */
+.input-group input {
   margin-bottom: 0;
   background-color: transparent;
-  border-top: 0;
-  border-right: 0;
-  border-left: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
   border-radius: 0;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
 }
 
+/* Remove bottom border on last input to avoid double bottom border */
+.input-group input:last-child {
+  border-bottom-width: 0;
+}
+
+/* Input groups with labels
+-------------------------------------------------- */
+
+/* To use labels with input groups, wrap a label and an input in an .input-row */
 .input-row {
-  height: 35px;
   overflow: hidden;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
 }
 
+/* Remove bottom border on last input-row to avoid double bottom border */
+.input-row:last-child {
+  border-bottom-width: 0;
+}
+
+/* Labels get floated left with a set percentage width */
 .input-row label {
   float: left;
-  width: 35%;
-  padding: 8px 15px;
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  line-height: 1.1;
+  width: 25%;
+  padding: 11px 10px 9px 13px; /* Optimizing the baseline for mobile. */
+  font-weight: bold;
 }
 
-.input-row input {
+/* Actual inputs float to right of labels and also have a set percentage */
+.input-row label + input {
   float: right;
   width: 65%;
   padding-left: 0;
   margin-bottom: 0;
-  border: 0;
-}
+  border-bottom: 0;
+}/* General button styles
+-------------------------------------------------- */
 
-.segmented-control {
+[class*="button"] {
   position: relative;
-  display: table;
-  overflow: hidden;
-  font-size: 12px;
-  font-weight: 400;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-.segmented-control .control-item {
-  display: table-cell;
-  width: 1%;
-  padding-top: 6px;
-  padding-bottom: 7px;
-  overflow: hidden;
-  line-height: 1;
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 0;
+  font-weight: bold;
+  line-height: 18px;
   color: #333;
   text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border-left: 1px solid #ccc;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  vertical-align: top;
+  cursor: pointer;
+  background-color: #f8f8f8;
+  background-image: -webkit-linear-gradient(top, #f8f8f8 0, #d4d4d4 100%);
+  background-image: linear-gradient(to bottom, #f8f8f8 0, #d4d4d4 100%);
+  border: 1px solid rgba(0, 0, 0, .3);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4), 0 1px 2px rgba(0, 0, 0, .05);
 }
-.segmented-control .control-item:first-child {
-  border-left-width: 0;
-}
-.segmented-control .control-item:active {
-  background-color: #eee;
-}
-.segmented-control .control-item.active {
+
+/* Active */
+[class*="button"]:active {
+  padding-top: 5px;
+  padding-bottom: 3px;
+  color: #333;
   background-color: #ccc;
+  background-image: none;
+  box-shadow: inset 0 3px 3px rgba(0, 0, 0, .2);
 }
 
-.segmented-control-primary {
-  border-color: #428bca;
-}
-.segmented-control-primary .control-item {
-  color: #428bca;
-  border-color: inherit;
-}
-.segmented-control-primary .control-item:active {
-  background-color: #cde1f1;
-}
-.segmented-control-primary .control-item.active {
+/* Button modifiers
+-------------------------------------------------- */
+
+/* Overriding styles for buttons with modifiers  */
+.button-main,
+.button-positive,
+.button-negative {
   color: #fff;
-  background-color: #428bca;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
 }
 
-.segmented-control-positive {
-  border-color: #5cb85c;
+/* Main button */
+.button-main {
+  background-color: #1eafe7;
+  background-image: -webkit-linear-gradient(top, #1eafe7 0, #1a97c8 100%);
+  background-image: linear-gradient(to bottom, #1eafe7 0, #1a97c8 100%);
+  border: 1px solid #117aaa;
 }
-.segmented-control-positive .control-item {
-  color: #5cb85c;
-  border-color: inherit;
+
+/* Positive button  */
+.button-positive {
+  background-color: #34ba15;
+  background-image: -webkit-linear-gradient(top, #34ba15 0, #2da012 100%);
+  background-image: linear-gradient(to bottom, #34ba15 0, #2da012 100%);
+  border: 1px solid #278f0f;
 }
-.segmented-control-positive .control-item:active {
-  background-color: #d8eed8;
+
+/* Negative button  */
+.button-negative {
+  background-color: #e71e1e;
+  background-image: -webkit-linear-gradient(top, #e71e1e 0,#c71a1a 100%);
+  background-image: linear-gradient(to bottom, #e71e1e 0, #c71a1a 100%);
+  border: 1px solid #b51a1a;
 }
-.segmented-control-positive .control-item.active {
+
+/* Active state for buttons with modifiers */
+.button-main:active,
+.button-positive:active,
+.button-negative:active {
   color: #fff;
-  background-color: #5cb85c;
+}
+.button-main:active {
+  background-color: #0876b1;
+}
+.button-positive:active {
+  background-color: #298f11;
+}
+.button-negative:active {
+  background-color: #b21a1a;
 }
 
-.segmented-control-negative {
-  border-color: #d9534f;
+/* Block level buttons (full width buttons) */
+.button-block {
+  display: block;
+  padding: 11px 0 13px;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
-.segmented-control-negative .control-item {
-  color: #d9534f;
-  border-color: inherit;
+
+/* Active state for block level buttons */
+.button-block:active {
+  padding: 12px 0;
 }
-.segmented-control-negative .control-item:active {
-  background-color: #f9e2e2;
+
+/* Counts in buttons
+-------------------------------------------------- */
+
+/* Generic styles for all counts within buttons */
+[class*="button"] [class*="count"] {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-right: -4px;
+  margin-left: 4px;
+  text-shadow: none;
+  background-color: rgba(0, 0, 0, .2);
+  box-shadow: inset 0 1px 1px -1px #000000, 0 1px 1px -1px #fff;
 }
-.segmented-control-negative .control-item.active {
+
+/* Position counts within block level buttons
+   Note: These are absolutely positioned so that text of button isn't "pushed" by count and always
+   stays at true center of button */
+.button-block [class*="count"] {
+  position: absolute;
+  right: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-right: 10px;
+}/* Chevrons
+-------------------------------------------------- */
+
+.chevron {
+  display: block;
+  height: 20px;
+}
+
+/* Base styles for both 1/2's of the chevron */
+.chevron:before,
+.chevron:after {
+  position: relative;
+  display: block;
+  width: 12px;
+  height: 4px;
+  background-color: #999;
+  content: '';
+}
+
+/* Position and rotate respective 1/2's of the chevron */
+.chevron:before {
+  top: 5px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+.chevron:after {
+  top: 7px;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}/* General count styles
+-------------------------------------------------- */
+
+[class*="count"] {
+  display: inline-block;
+  padding: 4px 9px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 13px;
   color: #fff;
-  background-color: #d9534f;
+  background-color: rgba(0, 0, 0, .3);
+  border-radius: 100px;
 }
 
-.control-content {
+/* Count modifiers
+-------------------------------------------------- */
+
+/* Overriding styles for counts with modifiers  */
+.count-main,
+.count-positive,
+.count-negative {
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+}
+
+/* Main count  */
+.count-main {
+  background-color: #1eafe7;
+  background-image: -webkit-linear-gradient(top, #1eafe7 0, #1a97c8 100%);
+  background-image: linear-gradient(to bottom, #1eafe7 0, #1a97c8 100%);
+}
+
+/* Positive count  */
+.count-positive {
+  background-color: #34ba15;
+  background-image: -webkit-linear-gradient(top, #34ba15 0, #2da012 100%);
+  background-image: linear-gradient(to bottom, #34ba15 0, #2da012 100%);
+}
+
+/* Negative count  */
+.count-negative {
+  background-color: #e71e1e;
+  background-image: -webkit-linear-gradient(top, #e71e1e 0,#c71a1a 100%);
+  background-image: linear-gradient(to bottom, #e71e1e 0, #c71a1a 100%);
+}/* Segmented controllers
+-------------------------------------------------- */
+
+.segmented-controller {
+  display: -webkit-box;
+  display: box;
+  margin-bottom: 10px;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 0 1px rgba(255, 255, 255, .5);
+  list-style: none;
+  background-color: #f8f8f8;
+  background-image: -webkit-linear-gradient(top, #f8f8f8 0, #d4d4d4 100%);
+  background-image: linear-gradient(to bottom, #f8f8f8 0, #d4d4d4 100%);
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(255, 255, 255, .8);
+  -webkit-box-orient: horizontal;
+          box-orient: horizontal;
+}
+
+/* Section within controller */
+.segmented-controller li {
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+  border-left: 1px solid #aaa;
+  box-shadow: inset 1px 0 rgba(255, 255, 255, .5);
+  -webkit-box-flex: 1;
+          box-flex: 1;
+}
+
+/* Link that fills each section */
+.segmented-controller li > a {
+  display: block;
+  padding: 8px 16px;
+  overflow: hidden;
+  line-height: 15px;
+  color: #333;
+  text-overflow: ellipsis;
+}
+
+/* Remove border-left and shadow from first section */
+.segmented-controller li:first-child {
+  border-left-width: 0;
+  box-shadow: none;
+}
+
+/* Active segment of controller */
+.segmented-controller li.active {
+  background-color: #ccc;
+  box-shadow: inset 0 1px 5px rgba(0, 0, 0, .3);
+}
+
+.segmented-controller-item {
   display: none;
 }
-.control-content.active {
+
+.segmented-controller-item.active {
   display: block;
-}
+}/* Popovers (to be used with popovers.js)
+-------------------------------------------------- */
 
 .popover {
   position: fixed;
@@ -1017,40 +987,110 @@ select {
   z-index: 20;
   display: none;
   width: 280px;
-  margin-left: -140px;
-  background-color: #fff;
+  padding: 5px;
+  margin-left: -146px;
+  background-color: #555;
+  background-image: -webkit-linear-gradient(top, #555 5%, #555 6%, #111 30%);
+  background-image: linear-gradient(to bottom, #555 5%, #555 6%,#111 30%);
+  border: 1px solid #111;
   border-radius: 6px;
-  -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, .1);
-          box-shadow: 0 0 15px rgba(0, 0, 0, .1);
   opacity: 0;
-  -webkit-transition: all .25s linear;
-     -moz-transition: all .25s linear;
-          transition: all .25s linear;
+  box-shadow: inset 0 1px 1px -1px #fff, 0 3px 10px rgba(0, 0, 0, .3);
   -webkit-transform: translate3d(0, -15px, 0);
-      -ms-transform: translate3d(0, -15px, 0);
           transform: translate3d(0, -15px, 0);
+  -webkit-transition: -webkit-transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+                  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
-.popover:before {
+
+/* Caret on top of popover using CSS triangles (thanks to @chriscoyier for solution) */
+.popover:before,
+.popover:after {
   position: absolute;
-  top: -15px;
   left: 50%;
   width: 0;
   height: 0;
-  margin-left: -15px;
   content: '';
-  border-right: 15px solid transparent;
-  border-bottom: 15px solid #fff;
-  border-left: 15px solid transparent;
 }
+.popover:before {
+  top: -20px;
+  margin-left: -21px;
+  border-right: 21px solid transparent;
+  border-bottom: 21px solid #111;
+  border-left: 21px solid transparent;
+}
+.popover:after {
+  top: -19px;
+  margin-left: -20px;
+  border-right: 20px solid transparent;
+  border-bottom: 20px solid #555;
+  border-left: 20px solid transparent;
+}
+
+/* Wrapper for a title and buttons */
+.popover-header {
+  display: -webkit-box;
+  display: box;
+  height: 34px;
+  margin-bottom: 5px;
+}
+
+/* Centered title for popover */
+.popover-header .title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 15px 0;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 12px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 -1px rgba(0, 0, 0, .5);
+}
+
+/* Generic style for all buttons in .popover-header */
+.popover-header [class*="button"] {
+  z-index: 25;
+  font-size: 12px;
+  line-height: 22px;
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+  background-color: #454545;
+  background-image: -webkit-linear-gradient(top, #454545 0, #353535 100%);
+  background-image: linear-gradient(to bottom, #454545 0, #353535 100%);
+  border: 1px solid #111;
+  -webkit-box-flex: 0;
+          box-flex: 0;
+}
+
+/* Hacky way to right align buttons outside of flex-box system
+   Note: is only absolutely positioned button, would be better if flex-box had an "align right" option */
+.popover-header .title + [class*="button"]:last-child,
+.popover-header .button + [class*="button"]:last-child,
+.popover-header [class*="button"].pull-right {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+/* Active state for popover header buttons */
+.popover-header .button:active {
+  color: #fff;
+  background-color: #0876b1;
+}
+
+/* Popover animation
+-------------------------------------------------- */
+
 .popover.visible {
   opacity: 1;
   -webkit-transform: translate3d(0, 0, 0);
-      -ms-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
 }
-.popover .bar ~ .table-view {
-  padding-top: 44px;
-}
+
+/* Backdrop (used as invisible touch escape)
+-------------------------------------------------- */
 
 .backdrop {
   position: fixed;
@@ -1058,103 +1098,126 @@ select {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 15;
-  background-color: rgba(0, 0, 0, .3);
+  z-index: 10;
 }
 
-.popover .btn-block {
+/* Block level buttons in popovers
+-------------------------------------------------- */
+
+/* Positioning and giving darker border to look sharp against dark popover */
+.popover .button-block {
   margin-bottom: 5px;
+  border: 1px solid #111;
 }
-.popover .btn-block:last-child {
+
+/* Remove extra margin on bottom of last button */
+.popover .button-block:last-child {
   margin-bottom: 0;
 }
 
-.popover .bar-nav {
-  border-bottom: 1px solid #ddd;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
+/* Lists in popovers
+-------------------------------------------------- */
 
-.popover .table-view {
-  max-height: 300px;
+.popover .list {
+  width: auto;
+  max-height: 250px;
+  margin-right: 0;
   margin-bottom: 0;
+  margin-left: 0;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
   background-color: #fff;
-  border-top: 0;
-  border-bottom: 0;
-  border-radius: 6px;
-}
-
+  border: 1px solid #000;
+  border-radius: 3px;
+  -webkit-overflow-scrolling: touch;
+}/* Modals
+-------------------------------------------------- */
 .modal {
-  position: fixed;
+  position: fixed; 
   top: 0;
-  z-index: 11;
+  opacity: 0;
+  z-index: 11; 
   width: 100%;
   min-height: 100%;
   overflow: hidden;
-  background-color: #fff;
-  opacity: 0;
-  -webkit-transition: -webkit-transform .25s, opacity 1ms .25s;
-     -moz-transition:    -moz-transform .25s, opacity 1ms .25s;
-          transition:         transform .25s, opacity 1ms .25s;
+  background-color: #fff;  
   -webkit-transform: translate3d(0, 100%, 0);
-      -ms-transform: translate3d(0, 100%, 0);
           transform: translate3d(0, 100%, 0);
+  -webkit-transition: -webkit-transform .25s ease-in-out, opacity 1ms .25s;
+          transition:         transform .25s ease-in-out, opacity 1ms .25s;
 }
+
+/* Modal - When active
+-------------------------------------------------- */
 .modal.active {
-  height: 100%;
   opacity: 1;
-  -webkit-transition: -webkit-transform .25s;
-     -moz-transition:    -moz-transform .25s;
-          transition:         transform .25s;
+  height: 100%;
+  -webkit-transition: -webkit-transform .25s ease-in-out;
+          transition:         transform .25 ease-in-out;
   -webkit-transform: translate3d(0, 0, 0);
-      -ms-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
-}
+}/* Slider styles (to be used with sliders.js)
+-------------------------------------------------- */
 
-.slider {
+/* Width/height of slider */
+.slider,
+.slider > li {
   width: 100%;
+  height: 200px;
 }
 
+/* Outer wrapper for slider */
 .slider {
   overflow: hidden;
   background-color: #000;
 }
-.slider .slide-group {
+
+/* Inner wrapper for slider (width of all slides together) */
+.slider > ul {
   position: relative;
-  font-size: 0;
+  font-size: 0; /* Remove spaces from inline-block children */
   white-space: nowrap;
-  -webkit-transition: all 0s linear;
-     -moz-transition: all 0s linear;
-          transition: all 0s linear;
+  -webkit-transition: all 0 linear;
+          transition: all 0 linear;
 }
-.slider .slide-group .slide {
+
+/* Individual slide */
+.slider > ul > li {
   display: inline-block;
-  width: 100%;
+  vertical-align: top; /* Ensure that li always aligns to top */
+  width: 100%; 
   height: 100%;
-  font-size: 14px;
-  vertical-align: top;
 }
+
+/* Required reset of font-size to same as standard body */
+.slider > ul > li > * {
+  font-size: 14px;
+}/* Toggle styles (to be used with toggles.js)
+-------------------------------------------------- */
 
 .toggle {
   position: relative;
-  display: block;
-  width: 74px;
-  height: 30px;
-  background-color: #fff;
-  border: 2px solid #ddd;
+  width: 75px;
+  height: 28px;
+  background-color: #eee;
+  border: 1px solid #bbb;
   border-radius: 20px;
-  -webkit-transition-duration: .2s;
-     -moz-transition-duration: .2s;
-          transition-duration: .2s;
-  -webkit-transition-property: background-color, border;
-     -moz-transition-property: background-color, border;
-          transition-property: background-color, border;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, .1);
 }
-.toggle .toggle-handle {
+
+/* Text indicating "on" or "off". Default is "off" */
+.toggle:before {
+  position: absolute;
+  right: 13px;
+  font-weight: bold;
+  line-height: 28px;
+  color: #777;
+  text-shadow: 0 1px #fff;
+  text-transform: uppercase;
+  content: "Off";
+}
+
+/* Sliding handle */
+.toggle-handle {
   position: absolute;
   top: -1px;
   left: -1px;
@@ -1162,278 +1225,63 @@ select {
   width: 28px;
   height: 28px;
   background-color: #fff;
-  border: 1px solid #ddd;
+  background-image: -webkit-linear-gradient(top, #fff 0, #f2f2f2 100%);
+  background-image: linear-gradient(to bottom, #fff 0, #f2f2f2 100%);
+  border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 100px;
-  -webkit-transition-duration: .2s;
-     -moz-transition-duration: .2s;
-          transition-duration: .2s;
-  -webkit-transition-property: -webkit-transform, border, width;
-     -moz-transition-property:    -moz-transform, border, width;
-          transition-property:         transform, border, width;
+  -webkit-transition: -webkit-transform 0.1s ease-in-out, border 0.1s ease-in-out;
+                  transition: transform 0.1s ease-in-out, border 0.1s ease-in-out;
 }
-.toggle:before {
-  position: absolute;
-  top: 3px;
-  right: 11px;
-  font-size: 13px;
-  color: #999;
-  text-transform: uppercase;
-  content: "Off";
-}
+
+/* Active state for toggle */
 .toggle.active {
-  background-color: #5cb85c;
-  border: 2px solid #5cb85c;
+  background-color: #19a8e4;
+  background-image: -webkit-linear-gradient(top, #088cd4 0, #19a8e4 100%);
+  background-image: linear-gradient(to bottom, #088cd4 0, #19a8e4 100%);
+  border: 1px solid #096c9d;
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, .25);
 }
+
+/* Active state for toggle handle */
 .toggle.active .toggle-handle {
-  border-color: #5cb85c;
-  -webkit-transform: translate3d(44px, 0, 0);
-      -ms-transform: translate3d(44px, 0, 0);
-          transform: translate3d(44px, 0, 0);
+  border-color: #0a76ad;
+  -webkit-transform: translate3d(48px,0,0);
+          transform: translate3d(48px,0,0);
 }
+
+/* Change "off" to "on" for active state */
 .toggle.active:before {
   right: auto;
   left: 15px;
   color: #fff;
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.25);
   content: "On";
-}
-.toggle input[type="checkbox"] {
-  display: none;
-}
+}/* Push styles (to be used with push.js)
+-------------------------------------------------- */
 
+/* Fade animation */
 .content.fade {
   left: 0;
   opacity: 0;
+  -webkit-transition: opacity .2s ease-in-out;
+          transition: opacity .2s ease-in-out;
 }
 .content.fade.in {
   opacity: 1;
 }
-.content.sliding {
-  z-index: 2;
-  -webkit-transition: -webkit-transform .4s;
-     -moz-transition:    -moz-transform .4s;
-          transition:         transform .4s;
+
+/* Slide animation */
+.content.slide {
   -webkit-transform: translate3d(0, 0, 0);
-      -ms-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
+ -webkit-transition: -webkit-transform .25s ease-in-out;
+         transition:         transform .25s ease-in-out;
 }
-.content.sliding.left {
-  z-index: 1;
+.content.slide.left {
   -webkit-transform: translate3d(-100%, 0, 0);
-      -ms-transform: translate3d(-100%, 0, 0);
           transform: translate3d(-100%, 0, 0);
 }
-.content.sliding.right {
-  z-index: 3;
+.content.slide.right {
   -webkit-transform: translate3d(100%, 0, 0);
-      -ms-transform: translate3d(100%, 0, 0);
           transform: translate3d(100%, 0, 0);
-}
-
-.navigate-left:after,
-.navigate-right:after,
-.push-left:after,
-.push-right:after {
-  position: absolute;
-  top: 50%;
-  display: inline-block;
-  font-family: Ratchicons;
-  font-size: inherit;
-  line-height: 1;
-  color: #bbb;
-  text-decoration: none;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
-
-  -webkit-font-smoothing: antialiased;
-}
-
-.navigate-left:after,
-.push-left:after {
-  left: 15px;
-  content: '\e822';
-}
-
-.navigate-right:after,
-.push-right:after {
-  right: 15px;
-  content: '\e826';
-}
-
-@font-face {
-  font-family: Ratchicons;
-  font-style: normal;
-  font-weight: normal;
-
-  src: url("../fonts/ratchicons.eot");
-  src: url("../fonts/ratchicons.eot?#iefix") format("embedded-opentype"), url("../fonts/ratchicons.woff") format("woff"), url("../fonts/ratchicons.ttf") format("truetype"), url("../fonts/ratchicons.svg#svgFontName") format("svg");
-}
-.icon {
-  display: inline-block;
-  font-family: Ratchicons;
-  font-size: 24px;
-  line-height: 1;
-  text-decoration: none;
-
-  -webkit-font-smoothing: antialiased;
-}
-
-.icon-back:before {
-  content: '\e80a';
-}
-
-.icon-bars:before {
-  content: '\e80e';
-}
-
-.icon-caret:before {
-  content: '\e80f';
-}
-
-.icon-check:before {
-  content: '\e810';
-}
-
-.icon-close:before {
-  content: '\e811';
-}
-
-.icon-code:before {
-  content: '\e812';
-}
-
-.icon-compose:before {
-  content: '\e813';
-}
-
-.icon-download:before {
-  content: '\e815';
-}
-
-.icon-edit:before {
-  content: '\e829';
-}
-
-.icon-forward:before {
-  content: '\e82a';
-}
-
-.icon-gear:before {
-  content: '\e821';
-}
-
-.icon-home:before {
-  content: '\e82b';
-}
-
-.icon-info:before {
-  content: '\e82c';
-}
-
-.icon-list:before {
-  content: '\e823';
-}
-
-.icon-more-vertical:before {
-  content: '\e82e';
-}
-
-.icon-more:before {
-  content: '\e82f';
-}
-
-.icon-pages:before {
-  content: '\e824';
-}
-
-.icon-pause:before {
-  content: '\e830';
-}
-
-.icon-person:before {
-  content: '\e832';
-}
-
-.icon-play:before {
-  content: '\e816';
-}
-
-.icon-plus:before {
-  content: '\e817';
-}
-
-.icon-refresh:before {
-  content: '\e825';
-}
-
-.icon-search:before {
-  content: '\e819';
-}
-
-.icon-share:before {
-  content: '\e81a';
-}
-
-.icon-sound:before {
-  content: '\e827';
-}
-
-.icon-sound2:before {
-  content: '\e828';
-}
-
-.icon-sound3:before {
-  content: '\e80b';
-}
-
-.icon-sound4:before {
-  content: '\e80c';
-}
-
-.icon-star-filled:before {
-  content: '\e81b';
-}
-
-.icon-star:before {
-  content: '\e81c';
-}
-
-.icon-stop:before {
-  content: '\e81d';
-}
-
-.icon-trash:before {
-  content: '\e81e';
-}
-
-.icon-up-nav:before {
-  content: '\e81f';
-}
-
-.icon-up:before {
-  content: '\e80d';
-}
-
-.icon-right-nav:before {
-  content: '\e818';
-}
-
-.icon-right:before {
-  content: '\e826';
-}
-
-.icon-down-nav:before {
-  content: '\e814';
-}
-
-.icon-down:before {
-  content: '\e820';
-}
-
-.icon-left-nav:before {
-  content: '\e82d';
-}
-
-.icon-left:before {
-  content: '\e822';
 }

@@ -69,16 +69,13 @@ li{
 /***********************
  *****   GENERAL   *****
  ***********************/
-
-.center {
+.view {
     margin-top: 6%;
     margin-bottom: 20%;
     margin-left: 6%;
     margin-right: 6%;
     width: 88%;
-    height: 76%;
-}
-.view {
+    height: 75%;
     background-image: url("../images/b1.jpg");
 }
 body {

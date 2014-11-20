@@ -774,7 +774,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     .when('/match/:selectedMatchId',
     {
       controller: 'MatchController',
-      templateUrl: 'views/PlayerControllerView.html'
+      templateUrl: 'views/PlayControllerView.html'
 
     })
     .when('/new-match',

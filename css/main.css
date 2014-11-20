@@ -42,8 +42,7 @@ li{
 /* adding button class*/
 .round-button {
     display:block;
-    width:160px;
-    height:160px;
+    width:30%;
     line-height:50px;
     border: 2px solid #f5f5f5;
     border-radius: 50%;

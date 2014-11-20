@@ -451,11 +451,6 @@ p {
   font-size: 18px;
 }
 
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
-  width: 100%;
-}
 
 .btn .badge {
   margin: -2px -4px -2px 4px;

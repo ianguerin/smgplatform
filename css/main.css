@@ -76,10 +76,13 @@ li{
     margin-right: 10%;
     width: 80%;
     height: 75%;
-    background-image: url("../images/b1.jpg");
+    /*background-image: url("../images/b1.jpg");*/
+    background-color:#303030;
 }
 body {
-  background-image: url("../images/b4.jpeg");
+  /*background-image: url("../images/b4.jpeg");*/
+    background-color:#686868;
+
 }
 
 h1.title {

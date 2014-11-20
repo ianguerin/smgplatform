@@ -79,16 +79,17 @@ li{
     /*background-image: url("../images/b1.jpg");*/
     background-color:#606060;
     border: 2px solid #a1a1a1;
-    border-radius: 25px;
+    border-radius: 25px;   
+    box-shadow: 10px 10px 5px #888888;
 }
 body {
   /*background-image: url("../images/b4.jpeg");*/
-    background-color:#080808;
+    background-color:#500000;
 
 }
 
 h1.title {
-  background-color: #363636;
+  background-color: #780000;
   
 }
 

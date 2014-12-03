@@ -713,19 +713,21 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
               $scope.response = angular.toJson(response, true);
               dateObj = new Date();
               $scope.lastCheckForUpdates = dateObj.getTime();
-              for(var i = 0; i < response[0].matches.length; i++){
-                for(var j = 0; j < $scope.myMatches.length; j++){
-                  if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
-                    $scope.myMatches[j] = response[0].matches[i];
-                    if(j == $scope.getMatchIndex($scope.matchId)){
-                      $scope.history = $scope.myMatches[j].history;
-                      $scope.updateTheBoard();
+              if(response){}
+                for(var i = 0; i < response[0].matches.length; i++){
+                  for(var j = 0; j < $scope.myMatches.length; j++){
+                    if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
+                      $scope.myMatches[j] = response[0].matches[i];
+                      if(j == $scope.getMatchIndex($scope.matchId)){
+                        $scope.history = $scope.myMatches[j].history;
+                        $scope.updateTheBoard();
+                      }
                     }
                   }
                 }
-              }
-              if(response[0].matches.length > 0){
-                $scope.summarizeMyMatches();  
+                if(response[0].matches.length > 0){
+                  $scope.summarizeMyMatches();  
+                }
               }
             });
           }

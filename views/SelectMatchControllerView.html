@@ -2,15 +2,26 @@
   <h1 class="title">Select a Match!</h1>
 </header>
 
-<div class="content">
+<div class="content center view">
   <div ng-include src="'views/userInfo.html'"></div>
   <select ng-model="$parent.matchId" ng-options="match.matchId as match.summary.full for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined && myMatches.length > 0">
     <option value="">Select a Match!</option>
   </select>
-  <input class="round-button" type=button onCLick="parent.location='#/new-match/'" value='Start a New Match!' ng-show="myMatches.length == 0">
   <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <input  type=button class="btn btn-positive btn-block" onCLick="parent.location='#/new-match/'" value='Start' ng-show="myMatches.length == 0">
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <button class ="btn btn-positive btn-block">Feedback</button>
+  <!--
   selected game - {{gameId ? gameId : 'no game selected'}} * matchId - {{matchId ? matchId : 'no match selected'}}
-  <br>
+  <br> -->
   <div ng-show="flags.matchMenu">
     <img ng-src="{{myMatches[getMatchIndex(matchId)].playersInfo[1 - yourPlayerIndex].avatarImageUrl}}"/>
     {{myMatches[getMatchIndex(matchId)].playersInfo[1 - yourPlayerIndex].displayName}}

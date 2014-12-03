@@ -2,18 +2,13 @@
   <h1 class="title">Login!</h1>
 </header>
 
-<div class="content">
-   <center>
+<div class="content center view">
   <div ng-include src="'views/userInfo.html'" ng-show="loggedIn"></div>
 
   <div ng-show="!loggedIn">automatically logging you in</div>
 
    <div>
-  <button class="round-button" ng-click="logOut()" ng-show="loggedIn">Log out?</button>
+
+  <button class="btn btn-positive btn-block" ng-click="logOut()" ng-show="loggedIn">Log out</button>
    </div>
-    </center>
-
-
 </div>
-
-

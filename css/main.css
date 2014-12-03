@@ -42,8 +42,8 @@ li{
 /* adding button class*/
 .round-button {
     display:block;
-    width:160px;
-    height:160px;
+    width:30%;
+    height: 20%;
     line-height:50px;
     border: 2px solid #f5f5f5;
     border-radius: 50%;
@@ -66,3 +66,43 @@ li{
 .padAButton{
 
 }
+/***********************
+ *****   GENERAL   *****
+ ***********************/
+.view {
+    margin-top: 6%;
+    margin-bottom: 20%;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    height: 76%;
+    background-image: url("../images/greenwaves.jpg");
+    /*background-color:#780000;*/
+    border: 2px solid #a1a1a1;
+    border-radius: 25px;   
+    box-shadow: 10px 10px 5px #888888;
+}
+body {
+  background-image: url("../images/wood_dark.jpg");
+  /*background-color:#500000;*/
+
+}
+
+h1.title {
+  background-color: #280000;
+  
+}
+#avatar {
+  width: 30%;
+}
+.btn {
+  width: 50%;
+  background-color: #ffbd54;
+}
+
+.playerId {
+  border-radius: 10px;
+  background-color: #222;
+  color: #fff;
+}
+ /**********************/

@@ -1,10 +1,11 @@
 <br/>
 
 <span>
-<img ng-src="{{playerInfo.avatarImageUrl}}" class="avatar" ng-show="loggedIn"/>
+<img id="avatar" ng-src="{{playerInfo.avatarImageUrl}}" class="avatar" ng-show="loggedIn"/>
 </span>
 
 <br/>
-
-<span ng-show="loggedIn">{{playerInfo.displayName}}</span>
+<div>
+  <span class="playerId" ng-show="loggedIn">{{playerInfo.displayName}}</span>
+</div>
 <br/>

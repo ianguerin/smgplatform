@@ -713,7 +713,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
               $scope.response = angular.toJson(response, true);
               dateObj = new Date();
               $scope.lastCheckForUpdates = dateObj.getTime();
-              if(response){}
+              if(response){
                 for(var i = 0; i < response[0].matches.length; i++){
                   for(var j = 0; j < $scope.myMatches.length; j++){
                     if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
@@ -765,24 +765,24 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     .when('/',
     {
       controller: 'RootController',
-      templateUrl: 'views/RootControllerView.html'
+      templateUrl: 'views/HomeLoginControllerView.html'
     })
     .when('/choose-match',
     {
       controller: 'ChooseMatchController',
-      templateUrl: 'views/ChooseMatchControllerView.html'
+      templateUrl: 'views/SelectMatchControllerView.html'
 
     })
     .when('/match/:selectedMatchId',
     {
       controller: 'MatchController',
-      templateUrl: 'views/MatchControllerView.html'
+      templateUrl: 'views/PlayControllerView.html'
 
     })
     .when('/new-match',
     {
       controller: 'NewMatchController',
-      templateUrl: 'views/NewControllerView.html'
+      templateUrl: 'views/StartNewMatchControllerView.html'
 
     })
     .otherwise({ redirectTo: '/choose-match'});

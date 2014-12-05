@@ -7,18 +7,8 @@
   <select ng-model="$parent.matchId" ng-options="match.matchId as match.summary.full for match in myMatches" ng-show="flags.listMultiplayerMatches && myMatches != undefined && myMatches.length > 0">
     <option value="">Select a Match!</option>
   </select>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <input  type=button class="btn btn-positive btn-block" onCLick="parent.location='#/new-match/'" value='Start' ng-show="myMatches.length == 0">
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <button class ="btn btn-positive btn-block">Feedback</button>
+  <input  type=button class="btn btn-positive btn-block custom-btn" onCLick="parent.location='#/new-match/'" value='Start' ng-show="myMatches.length == 0">
+  <button class ="btn btn-positive btn-block custom-btn">Feedback</button>
   <!--
   selected game - {{gameId ? gameId : 'no game selected'}} * matchId - {{matchId ? matchId : 'no match selected'}}
   <br> -->

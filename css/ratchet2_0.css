@@ -399,9 +399,9 @@ p {
   border: 1px solid #5cb85c;
 }
 .btn-positive:active, .btn-positive.active {
-  color: #fff;
-  background-color: #449d44;
-  border: 1px solid #449d44;
+  color: black;
+  background-color: #3071a9;
+  border: 1px solid #3071a9;
 }
 
 .btn-negative {

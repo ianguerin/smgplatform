@@ -16,7 +16,7 @@ function fbLoginSuccess(userData) {
 }
 
 function successHandler (result) {
-    alert('result = ' + result);
+  // alert('result = ' + result);
 }
 
 function errorHandler (error) {

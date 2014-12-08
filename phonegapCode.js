@@ -26,10 +26,10 @@ function errorHandler (error) {
 function onDeviceReady() {
   alert("onDeviceReady");
 
-  facebookConnectPlugin.login(["public_profile"],
-    fbLoginSuccess,
-    function (error) { sendToken("", error); }
-  );
+  // facebookConnectPlugin.login(["public_profile"],
+  //   fbLoginSuccess,
+  //   function (error) { sendToken("", error); }
+  // );
 
   var pushNotification = window.plugins.pushNotification;
   if ( cordova.platformId == "android" || cordova.platformId == "Android" || cordova.platformId == "amazon-fireos" ){

@@ -772,7 +772,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         // alert(accessToken);
         $scope.fbAccessToken = accessToken;
         if($scope.loggedIn){
-          alert("you will be joined");
+          // alert("you will be joined");
           var message = [ // SOCIAL_LOGIN - JOIN ACCOUNTS
             {
               socialLogin: {
@@ -784,7 +784,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
             }
           ];
         }else{
-          alert("you will be added as a new user")
+          // alert("you will be added as a new user")
           var message = [ // SOCIAL_LOGIN - MERGE ACCOUNTS
             {
               socialLogin: {

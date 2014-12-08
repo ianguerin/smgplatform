@@ -29,7 +29,7 @@ function onDeviceReady() {
 //   function (error) { sendToken("", error); }
 // );
 
-  alert('onDeviceReady4');
+  alert('onDeviceReady7');
   var pushNotification = window.plugins.pushNotification;
   if ( cordova.platformId == 'android' || cordova.platformId == 'Android' || cordova.platformId == "amazon-fireos" ){
     pushNotification.register(
@@ -76,7 +76,6 @@ function tokenHandler(result) {
   // Your iOS push server needs to know the token before it can push to this device
   // here is where you might want to send it the token for later use.
   alert('device token = ' + result);
-  document.getElementById("regIdTextarea").value = result;
 }
 
 // Android and Amazon Fire OS
@@ -90,7 +89,6 @@ function onNotification(e) {
       {
         // Your GCM push server needs to know the regID before it can push to this device
         alert('REGID:' + e.regid);
-        document.getElementById("regIdTextarea").value = e.regid;
 
         window.regid = e.regid;
       }

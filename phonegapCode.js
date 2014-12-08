@@ -19,12 +19,13 @@ function onDeviceReady() {
   alert("onDeviceReady");
 
   facebookConnectPlugin.login(["public_profile"],
-      fbLoginSuccess,
-      function (error) { sendToken("", error); }
+    fbLoginSuccess,
+    function (error) { sendToken("", error); }
   );
 
   var pushNotification = window.plugins.pushNotification;
   if ( cordova.platformId == "android" || cordova.platformId == "Android" || cordova.platformId == "amazon-fireos" ){
+    alert("gonna register android device");
     pushNotification.register(
       successHandler,
       errorHandler,

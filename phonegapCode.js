@@ -15,6 +15,14 @@ function fbLoginSuccess(userData) {
   });
 }
 
+function successHandler (result) {
+  alert('result = ' + result);
+}
+
+function errorHandler (error) {
+  alert('error = ' + error);
+}
+
 function onDeviceReady() {
   alert("onDeviceReady");
 

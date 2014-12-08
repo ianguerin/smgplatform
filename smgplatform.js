@@ -5,7 +5,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     function ($sce, $scope, $log, $window, $timeout, $interval, $rootScope, serverApiService, platformMessageService, featureService, stateService) {
 
     //DEV MODE?
-    $scope.devMode = true;
+    $scope.devMode = false;
 
     // lets get some flags and args
     featureService.init();
@@ -768,11 +768,11 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
      */
 
      $scope.passAuthToAngular = function(accessToken){
-        alert("angular knows you now");
-        alert(accessToken);
+        // alert("angular knows you now");
+        // alert(accessToken);
         $scope.fbAccessToken = accessToken;
         if($scope.loggedIn){
-          alert("you will be joined");
+          // alert("you will be joined");
           var message = [ // SOCIAL_LOGIN - JOIN ACCOUNTS
             {
               socialLogin: {
@@ -784,7 +784,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
             }
           ];
         }else{
-          alert("you will be added as a new user")
+          // alert("you will be added as a new user")
           var message = [ // SOCIAL_LOGIN - MERGE ACCOUNTS
             {
               socialLogin: {

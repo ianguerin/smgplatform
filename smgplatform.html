@@ -2,7 +2,7 @@
 <html lang="en" ng-app="myApp">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>SMGPlatform|v022</title>
+  <title>SMGPlatform|v023</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 
   <link rel="stylesheet" type="text/css" href="css/ratchet2_0.css">
@@ -47,7 +47,7 @@
       if (source === window.parent) {
         // alert("platform got message:" + JSON.stringify(message));
         if (message.token) {
-          alert("fb token received!")
+          // alert("fb token received!")
           testFbAPI(message.token);
         }
       }
@@ -58,9 +58,9 @@
         "https://graph.facebook.com/v2.2/me?format=json&method=get&pretty=0&suppress_http_code=1&access_token="
           + accessToken,
         function(responseText) {
-          var response = JSON.parse(responseText);
-          alert("Successful login for: " + response.name);
-          alert(accessToken);
+          // var response = JSON.parse(responseText);
+          // alert("Successful login for: " + response.name);
+          // alert(accessToken);
           angular.element(document.getElementById("Ctrl")).scope().passAuthToAngular(accessToken);
         }
       );

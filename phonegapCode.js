@@ -31,7 +31,7 @@ function onDeviceReady() {
 
   alert('onDeviceReady7');
   var pushNotification = window.plugins.pushNotification;
-  pushNotification.unregister(successHandler, errorHandler);
+
   if ( cordova.platformId == 'android' || cordova.platformId == 'Android' || cordova.platformId == "amazon-fireos" ){
     pushNotification.register(
       successHandler,
@@ -80,6 +80,7 @@ function tokenHandler(result) {
 }
 
 // Android and Amazon Fire OS
+<script>
 function onNotification(e) {
   alert('RECEIVED:' + JSON.stringify(e));
 
@@ -110,4 +111,5 @@ function onNotification(e) {
     break;
   }
 }
+</script>
 document.addEventListener("deviceready", onDeviceReady, false);

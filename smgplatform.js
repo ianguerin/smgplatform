@@ -5,7 +5,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     function ($sce, $scope, $log, $window, $timeout, $interval, $rootScope, serverApiService, platformMessageService, featureService, stateService) {
 
     //DEV MODE?
-    $scope.devMode = false;
+    $scope.devMode = true;
 
     // lets get some flags and args
     featureService.init();
@@ -769,6 +769,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
      $scope.passAuthToAngular = function(accessToken){
         alert("angular knows you now");
+        alert(accessToken);
         $scope.fbAccessToken = accessToken;
         if($scope.loggedIn){
           alert("you will be joined");

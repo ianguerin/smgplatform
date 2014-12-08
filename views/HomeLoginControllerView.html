@@ -6,9 +6,11 @@
   <div ng-include src="'views/userInfo.html'" ng-show="loggedIn"></div>
 
   <div ng-show="!loggedIn">automatically logging you in</div>
-
-   <div>
-
-  <button id="logout-btn" class="btn btn-positive btn-block custom-btn" ng-click="logOut()" ng-show="loggedIn">Log out</button>
-   </div>
+ 
+  <div>
+    <button id="logout-btn" class="btn btn-positive btn-block custom-btn" ng-click="logOut()" ng-show="loggedIn">Log Out</button>
+  </div>
+  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+  </fb:login-button>
+  <button ng-click="testFbAPI()">test fb api</button>
 </div>

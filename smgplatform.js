@@ -4,7 +4,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
   .controller('Ctrl', 
     function ($sce, $scope, $log, $window, $timeout, $interval, $rootScope, serverApiService, platformMessageService, featureService, stateService) {
 
-
     //DEV MODE?
     $scope.devMode = false;
 
@@ -182,6 +181,25 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           // refreshes the page
           window.location.reload();
         }
+        // MUST CALL getGames AGAIN!
+        $scope.gameId = featureService.args.gameId;
+      });
+    };
+
+    $scope.socialLogin = function (message){
+      // alert(JSON.stringify(message));
+      serverApiService.sendMessage(message, function (response) {
+        // console.log("\n\n\n\n\n");
+        // console.log(response);
+        // console.log("\n\n\n\n\n");
+
+        $scope.response = angular.toJson(response, true);
+        $window.lastResponse = response[0];
+        $scope.loggedIn = true;
+
+        window.localStorage.setItem("playerInfo", angular.toJson(response[0].playerInfo, true));
+        $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
+
         // MUST CALL getGames AGAIN!
         $scope.gameId = featureService.args.gameId;
       });
@@ -496,7 +514,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           reloadMatchId = matchId;
         }
       }else{
-        window.location.hash = "#/choose-match";
+        // window.location.hash = "#/choose-match";
       }
     }else{
       $scope.loggedIn = false;
@@ -685,12 +703,15 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       }else{
         $scope.showGame = false;
       }
-      
+      $timeout(function(){
+    FB.XFBML.parse();      
+        },500);
+    
     };    
 
     // this is the auto refresh that grows exponentially
     $scope.callRefreshTimeout = function(newIntervalSeconds){
-      console.log("here");
+
       if($scope.flags.autoRefresh){
         if(newIntervalSeconds != -1){
           intervalSeconds = newIntervalSeconds;
@@ -741,6 +762,41 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     if($scope.flags.autoRefresh){
       $scope.callRefreshTimeout(-1);
     }
+
+    /*
+     * facebook stuff
+     */
+
+     $scope.passAuthToAngular = function(auth){
+        // console.log("\n\n\n\n\n\n\n\n\n\n");
+        // console.log(JSON.stringify(auth));
+        // console.log("\n\n\n\n\n\n\n\n\n\n");
+        $scope.fbAccessToken = auth.accessToken;
+        if($scope.loggedIn){
+          alert("you will be joined");
+          var message = [ // SOCIAL_LOGIN - JOIN ACCOUNTS
+            {
+              socialLogin: {
+                myPlayerId:$scope.playerInfo.myPlayerId, 
+                accessSignature:$scope.playerInfo.accessSignature,
+                accessToken: $scope.fbAccessToken,
+                uniqueType: "F"
+              }
+            }
+          ];
+        }else{
+          alert("you will be added as a new user")
+          var message = [ // SOCIAL_LOGIN - MERGE ACCOUNTS
+            {
+              socialLogin: {
+                accessToken: $scope.fbAccessToken,
+                uniqueType: "F"
+              }
+            }
+          ];
+        }
+        $scope.socialLogin(message);
+      };
 
   })
   .factory('$exceptionHandler', function ($window, $log) {

@@ -92,25 +92,16 @@ h1.title {
   background-color: #280000;
   
 }
-#avatar {
-  width: 30%;
-}
 .custom-btn {
   width: 70%;
-  margin-bottom: 20%;
-  margin-top: 20%
   font-weight: bold;
-  font-family: "Comic Sans MS", cursive, sans-serif;
 }
 input.btn {
-  margin-top: 15%;
 }
 #logout-btn {
-  margin-top: 35%;
+  margin-bottom: 0;
 }
 .playerId {
-  border-radius: 10px;
-  background-color: #222;
   color: #fff;
 }
  /**********************/

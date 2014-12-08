@@ -771,6 +771,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         // console.log("\n\n\n\n\n\n\n\n\n\n");
         // console.log(JSON.stringify(auth));
         // console.log("\n\n\n\n\n\n\n\n\n\n");
+        alert("angular knows you now");
         $scope.fbAccessToken = auth.accessToken;
         if($scope.loggedIn){
           alert("you will be joined");

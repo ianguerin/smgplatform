@@ -59,9 +59,9 @@
           + access_token,
         function(responseText) {
           var response = JSON.parse(responseText);
-          alert('Successful login for: ' + response.name);
+          alert("Successful login for: " + response.name);
           alert(responseText);
-          angular.element(document.getElementById('Ctrl')).scope().passAuthToAngular(response.authResponse);
+          angular.element(document.getElementById("Ctrl")).scope().passAuthToAngular(response.authResponse);
         }
       );
     }

@@ -47,7 +47,7 @@
       if (source === window.parent) {
         // alert("platform got message:" + JSON.stringify(message));
         if (message.token) {
-          angular.element(document.getElementById('Ctrl')).scope().passAuthToAngular(response.authResponse);
+          alert("fb token received!")
           testFbAPI(message.token);
         }
       }

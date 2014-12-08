@@ -768,8 +768,8 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
      */
 
      $scope.passAuthToAngular = function(accessToken){
-        alert("angular knows you now");
-        alert(accessToken);
+        // alert("angular knows you now");
+        // alert(accessToken);
         $scope.fbAccessToken = accessToken;
         if($scope.loggedIn){
           alert("you will be joined");

@@ -1,5 +1,5 @@
 function sendMessageToPlatform(message) {
-  alert("sendMessageToPlatform:" + JSON.stringify(message));
+  // alert("sendMessageToPlatform:" + JSON.stringify(message));
   window.document.getElementById("platform_iframe").contentWindow.postMessage(
     message, "*");
 }
@@ -15,6 +15,14 @@ function fbLoginSuccess(userData) {
   });
 }
 
+function successHandler (result) {
+    alert('result = ' + result);
+}
+
+function errorHandler (error) {
+  alert('error = ' + error);
+}
+
 function onDeviceReady() {
   alert("onDeviceReady");
 
@@ -25,7 +33,6 @@ function onDeviceReady() {
 
   var pushNotification = window.plugins.pushNotification;
   if ( cordova.platformId == "android" || cordova.platformId == "Android" || cordova.platformId == "amazon-fireos" ){
-    alert("gonna register android device");
     pushNotification.register(
       successHandler,
       errorHandler,

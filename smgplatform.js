@@ -767,12 +767,9 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
      * facebook stuff
      */
 
-     $scope.passAuthToAngular = function(auth){
-        // console.log("\n\n\n\n\n\n\n\n\n\n");
-        // console.log(JSON.stringify(auth));
-        // console.log("\n\n\n\n\n\n\n\n\n\n");
+     $scope.passAuthToAngular = function(accessToken){
         alert("angular knows you now");
-        $scope.fbAccessToken = auth.accessToken;
+        $scope.fbAccessToken = accessToken;
         if($scope.loggedIn){
           alert("you will be joined");
           var message = [ // SOCIAL_LOGIN - JOIN ACCOUNTS

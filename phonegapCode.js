@@ -31,7 +31,7 @@ function onDeviceReady() {
 
   alert('onDeviceReady7');
   var pushNotification = window.plugins.pushNotification;
-  alert(JSON.stringify(facebookConnectPlugin));
+  pushNotification.unregister(successHandler, errorHandler);
   if ( cordova.platformId == 'android' || cordova.platformId == 'Android' || cordova.platformId == "amazon-fireos" ){
     pushNotification.register(
       successHandler,

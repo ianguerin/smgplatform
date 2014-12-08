@@ -80,7 +80,6 @@ function tokenHandler(result) {
 }
 
 // Android and Amazon Fire OS
-<script>
 function onNotification(e) {
   alert('RECEIVED:' + JSON.stringify(e));
 
@@ -111,5 +110,4 @@ function onNotification(e) {
     break;
   }
 }
-</script>
 document.addEventListener("deviceready", onDeviceReady, false);

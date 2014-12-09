@@ -47,13 +47,14 @@
         if (message.token) {
           // alert("fb token received!");
           testFbAPI(message.token);
-        }else if(message.payload.regid){
-          alert("registered!: " + message.payload.regid);
-        }else if(message.payload.notification){
-          alert("got notification");
         }else{
           alert(JSON.stringify(message));
         }
+        // }else if(message.payload.regid){
+        //   alert("registered!: " + message.payload.regid);
+        // }else if(message.payload.notification){
+        //   alert("got notification");
+        // 
       }
     }, false);
 

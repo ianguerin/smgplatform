@@ -708,7 +708,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     
     };    
 
-    // push notifications currently call this, !!must be changed
+    // push notifications alert the device to ask the server for changes
     $scope.callRefreshTimeout = function(){
 
       if($scope.flags.autoRefresh){
@@ -785,7 +785,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       };
 
       $scope.giveAngularRegid = function(regid){
-        alert("angular now has regid");
         $scope.regId = regid;
         var message = [ //REGISTER_FOR_PUSH_NOTIFICATIONS
           {
@@ -807,10 +806,9 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       };
       
       $scope.giveAngularNotification = function(notification){
-        alert("angular now has notification");
+        // alert("angular now has notification");
         $scope.callRefreshTimeout();
-        alert(JSON.stringify(notification));
-
+        // alert(JSON.stringify(notification));
       };
 
   })

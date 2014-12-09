@@ -1,6 +1,7 @@
 
 function sendToken(token, error) {
   sendMessageToPlatform({token: token, error: error});
+  registerForPushNotification();
 }
 
 function fbLoginSuccess(userData) {

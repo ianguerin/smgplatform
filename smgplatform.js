@@ -797,6 +797,14 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         $scope.socialLogin(message);
       };
 
+      $scope.giveAngularRegid = function(accessToken){
+        alert("angular now has regid");
+      };
+      
+      $scope.giveAngularNotification = function(accessToken){
+        alert("angular now has notification");
+      };
+
   })
   .factory('$exceptionHandler', function ($window, $log) {
   return function (exception, cause) {

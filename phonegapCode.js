@@ -1,8 +1,4 @@
-function sendMessageToPlatform(message) {
-  // alert("sendMessageToPlatform:" + JSON.stringify(message));
-  window.document.getElementById("platform_iframe").contentWindow.postMessage(
-    message, "*");
-}
+
 function sendToken(token, error) {
   sendMessageToPlatform({token: token, error: error});
 }

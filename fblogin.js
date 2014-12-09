@@ -18,7 +18,6 @@
       console.log('Or this message to merge with an existing user by passing myPlayerId+accessSignature:');
       console.log('[{socialLogin: {myPlayerId: "5660460074401792", accessSignature: "dbc116314cb079b3f139f7ea3838bfad", accessToken: "' + response.authResponse.accessToken + '", uniqueType: "F"}}]');
       testAPI();
-      // angular.element(document.getElementById('Ctrl')).scope().passAuthToAngular(response.authResponse);
     } else if (response.status === 'not_authorized') {
       console.log("The person is logged into Facebook, but not your app.");
     } else {

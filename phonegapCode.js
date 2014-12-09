@@ -29,9 +29,9 @@ function onDeviceReady() {
 //   function (error) { sendToken("", error); }
 // );
 
-  alert('onDeviceReady7');
+  alert("device is ready");
   var pushNotification = window.plugins.pushNotification;
-
+  alert(cordova.platformId);
   if ( cordova.platformId == 'android' || cordova.platformId == 'Android' || cordova.platformId == "amazon-fireos" ){
     pushNotification.register(
       successHandler,
@@ -40,6 +40,7 @@ function onDeviceReady() {
           "senderID":"24803504516",
           "ecb":"onNotification"
       });
+    alert(cordova.platformId);
   } else {
     pushNotification.register(
       tokenHandler,

@@ -26,7 +26,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     var gotGameReady = false;
     var reloadingMatch = false;
     var reloadMatchId;
-    var intervalSeconds = 1;
 
     /*
     * functions that interact with the server
@@ -370,7 +369,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // creates a new game on the server, making you player one
     $scope.createNewGameOnServer = function(move){
-      $scope.callRefreshTimeout(1);
+      $scope.callRefreshTimeout();
       var message = [ // NEW_MATCH
         {
           newMatch: {
@@ -410,7 +409,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // sends move in a game that already has been created on the server
     $scope.sendMoveToServer = function(move){
-      $scope.callRefreshTimeout(1);
+      $scope.callRefreshTimeout();
       var message = [ // MADE_MOVE
         {
           madeMove: {
@@ -697,7 +696,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     };
 
     $scope.changeActive = function(showGame){
-      $scope.callRefreshTimeout(1);
+      $scope.callRefreshTimeout();
       if(($scope.matchId != undefined || window.location.hash.indexOf("firstMove") != -1 || window.location.hash.indexOf("playComputer") != -1 || window.location.hash.indexOf("passAndPlay") != -1) && showGame){
         $scope.showGame = showGame;
       }else{
@@ -709,59 +708,47 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
     
     };    
 
-    // this is the auto refresh that grows exponentially
-    $scope.callRefreshTimeout = function(newIntervalSeconds){
+    // push notifications currently call this, !!must be changed
+    $scope.callRefreshTimeout = function(){
 
       if($scope.flags.autoRefresh){
-        if(newIntervalSeconds != -1){
-          intervalSeconds = newIntervalSeconds;
-        }
-        $timeout(function() {
-          console.log("checking for updates!");
-          if($scope.myMatches !== undefined){
-            var message = [ // GET_PLAYER_MATCHES
-              {
-                getPlayerMatches: {
-                  gameId: $scope.gameId, 
-                  getCommunityMatches: false,
-                  updatedTimestampMillisAtLeast: $scope.lastCheckForUpdates,
-                  myPlayerId:$scope.playerInfo.myPlayerId, 
-                  accessSignature:$scope.playerInfo.accessSignature
-                }
+        console.log("checking for updates!");
+        if($scope.myMatches !== undefined){
+          var message = [ // GET_PLAYER_MATCHES
+            {
+              getPlayerMatches: {
+                gameId: $scope.gameId, 
+                getCommunityMatches: false,
+                updatedTimestampMillisAtLeast: $scope.lastCheckForUpdates,
+                myPlayerId:$scope.playerInfo.myPlayerId, 
+                accessSignature:$scope.playerInfo.accessSignature
               }
-            ];
-            serverApiService.sendMessage(message, function (response) {
-              $scope.response = angular.toJson(response, true);
-              dateObj = new Date();
-              $scope.lastCheckForUpdates = dateObj.getTime();
-              if(response){
-                for(var i = 0; i < response[0].matches.length; i++){
-                  for(var j = 0; j < $scope.myMatches.length; j++){
-                    if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
-                      $scope.myMatches[j] = response[0].matches[i];
-                      if(j == $scope.getMatchIndex($scope.matchId)){
-                        $scope.history = $scope.myMatches[j].history;
-                        $scope.updateTheBoard();
-                      }
+            }
+          ];
+          serverApiService.sendMessage(message, function (response) {
+            $scope.response = angular.toJson(response, true);
+            dateObj = new Date();
+            $scope.lastCheckForUpdates = dateObj.getTime();
+            if(response){
+              for(var i = 0; i < response[0].matches.length; i++){
+                for(var j = 0; j < $scope.myMatches.length; j++){
+                  if($scope.myMatches[j].matchId == response[0].matches[i].matchId){
+                    $scope.myMatches[j] = response[0].matches[i];
+                    if(j == $scope.getMatchIndex($scope.matchId)){
+                      $scope.history = $scope.myMatches[j].history;
+                      $scope.updateTheBoard();
                     }
                   }
                 }
-                if(response[0].matches.length > 0){
-                  $scope.summarizeMyMatches();  
-                }
               }
-            });
-          }
-          intervalSeconds *= 2;
-          $scope.callRefreshTimeout(-1);
-        }, intervalSeconds * 1000);
+              if(response[0].matches.length > 0){
+                $scope.summarizeMyMatches();  
+              }
+            }
+          });
+        }
       }
     };
-
-    // auto refresh will look for changes in the matches that you are playing and update your game
-    if($scope.flags.autoRefresh){
-      $scope.callRefreshTimeout(-1);
-    }
 
     /*
      * facebook stuff
@@ -797,12 +784,33 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         $scope.socialLogin(message);
       };
 
-      $scope.giveAngularRegid = function(accessToken){
+      $scope.giveAngularRegid = function(regid){
         alert("angular now has regid");
+        $scope.regId = regid;
+        var message = [ //REGISTER_FOR_PUSH_NOTIFICATIONS
+          {
+            registerForPushNotifications: {
+              myPlayerId:$scope.playerInfo.myPlayerId, 
+              accessSignature:$scope.playerInfo.accessSignature, 
+              gameId: $scope.gameId, 
+              registrationId: $scope.regId,
+              platformType: "ANDROID"
+            }
+          }
+        ];
+
+        serverApiService.sendMessage(message, function (response) {
+          $scope.response = angular.toJson(response, true);
+          $window.lastResponse = response[0];
+          
+        });
       };
       
-      $scope.giveAngularNotification = function(accessToken){
+      $scope.giveAngularNotification = function(notification){
         alert("angular now has notification");
+        $scope.callRefreshTimeout();
+        alert(JSON.stringify(notification));
+
       };
 
   })

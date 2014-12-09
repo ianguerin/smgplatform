@@ -48,10 +48,10 @@
           // alert("fb token received!");
           testFbAPI(message.token);
         }else if(message.payload.regid){
-          alert("registered!: " + message.payload.regid);
+          // alert("registered!: " + message.payload.regid);
           angular.element(document.getElementById("Ctrl")).scope().giveAngularRegid(message.payload.regid);
         }else if(message.payload.notification){
-          alert("got notification");
+          // alert("got notification");
           angular.element(document.getElementById("Ctrl")).scope().giveAngularNotification(message.payload.notification);
         }else{
           // alert(JSON.stringify(message));
@@ -72,12 +72,13 @@
       );
     }
 
-    makeAjaxCall("phonegapCode.js",
-      function(responseText) {
-        // alert('Loaded phonegapCode.js: ' + responseText);
-        sendMessageToPhonegap(responseText);
-      }
-    );
+    // this file is empty for now, no need to send it
+    // makeAjaxCall("phonegapCode.js",
+    //   function(responseText) {
+    //     // alert('Loaded phonegapCode.js: ' + responseText);
+    //     sendMessageToPhonegap(responseText);
+    //   }
+    // );
 
   </script>
 <body ng-cloak ng-controller="Ctrl" id="Ctrl">

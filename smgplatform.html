@@ -51,6 +51,8 @@
           alert("registered!: " + message.payload.regid);
         }else if(message.payload.notification){
           alert("got notification");
+        }else{
+          alert(JSON.stringify(message));
         }
       }
     }, false);

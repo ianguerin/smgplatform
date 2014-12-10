@@ -53,7 +53,7 @@
         }else if(message.payload && message.payload.notification){
           // alert("got notification");
           angular.element(document.getElementById("Ctrl")).scope().giveAngularNotification(message.payload.notification);
-          parent.location = "#/choose-match"
+          parent.location = "#/choose-match";
         }else{
           // alert(JSON.stringify(message));
         }

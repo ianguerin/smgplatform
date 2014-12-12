@@ -203,6 +203,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         document.body.style.display = "block";
         
         window.location.hash = "#/choose-match";
+        $scope.getMyMatches();
       });
     };
 

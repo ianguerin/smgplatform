@@ -197,10 +197,13 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         $scope.loggedIn = true;
 
         window.localStorage.setItem("playerInfo", angular.toJson(response[0].playerInfo, true));
-        $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
 
-        // MUST CALL getGames AGAIN!
+        $scope.loggedIn = true;
+        $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
         $scope.gameId = featureService.args.gameId;
+        document.body.style.display = "block";
+        
+        window.location.hash = "#/choose-match";
       });
     };
 
@@ -513,7 +516,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
           reloadMatchId = matchId;
         }
       }else{
-        // window.location.hash = "#/choose-match";
+        window.location.hash = "#/choose-match";
       }
     }else{
       $scope.loggedIn = false;

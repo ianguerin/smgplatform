@@ -19,14 +19,7 @@ viewsControllers.controller('MatchController', ['$scope', '$routeParams', functi
   document.getElementById("match-tab").className = "tab-item active";
 }]);
 
-viewsControllers.controller('NewMatchController', ['$scope', '$rootScope', function($scope, $rootScope) {
-  $scope.currentView = "newmatch";
-  changeActive();
-  document.getElementById("newmatch-tab").className = "tab-item active";
-}]);
-
 function changeActive(){
-  document.getElementById("newmatch-tab").className = "tab-item";
   document.getElementById("choosematch-tab").className = "tab-item";
   document.getElementById("match-tab").className = "tab-item";
   document.getElementById("home-tab").className = "tab-item";

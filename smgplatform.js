@@ -848,11 +848,5 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
       templateUrl: 'views/PlayControllerView.html'
 
     })
-    .when('/new-match',
-    {
-      controller: 'NewMatchController',
-      templateUrl: 'views/StartNewMatchControllerView.html'
-
-    })
     .otherwise({ redirectTo: '/choose-match'});
 });

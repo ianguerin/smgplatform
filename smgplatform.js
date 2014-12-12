@@ -197,7 +197,6 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         $scope.loggedIn = true;
 
         window.localStorage.setItem("playerInfo", angular.toJson(response[0].playerInfo, true));
-
         $scope.loggedIn = true;
         $scope.playerInfo = JSON.parse(window.localStorage.getItem("playerInfo"));
         $scope.gameId = featureService.args.gameId;
@@ -213,6 +212,7 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
         alert("select a game first!");
         return;
       }
+      alert("Gathering your matches");
       var message = [ // GET_PLAYER_MATCHES
         {
           getPlayerMatches: {

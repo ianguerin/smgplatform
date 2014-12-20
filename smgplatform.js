@@ -458,6 +458,9 @@ angular.module('myApp', ['ngRoute', 'viewsControllers'])
 
     // update the board with new states, called by autorefresh and on loading a match into the iframe
     $scope.updateTheBoard = function(){
+      if(!$scope.history){
+        return;
+      }
       var turnIndexBefore = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 2]);
       var turnIndexAfter = $scope.getTurnIndex($scope.history.moves[$scope.history.moves.length - 1]);
       var endScore = $scope.isGameOver();
